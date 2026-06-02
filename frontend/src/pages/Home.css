@@ -1,0 +1,72 @@
+.flone-hero { background: #f5f5f5; padding: 0; }
+.flone-hero-inner { display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 540px; }
+.flone-hero-media {
+  position: relative;
+  overflow: hidden;
+  background: #f5f5f5;
+  display: grid;
+  place-items: center;
+  padding: 38px 30px;
+  min-height: 540px;
+}
+.flone-hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: none;
+  pointer-events: none;
+}
+.flone-hero-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  max-width: 100%;
+  max-height: 440px;
+  filter: none;
+  transform: none;
+  border-radius: 20px;
+}
+.flone-hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 52px 44px;
+  background: #f5f5f5;
+  flex-direction: column;
+}
+.flone-hero-kicker { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px; color: #666; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+.kicker-line { width: 30px; height: 1px; background: #333; }
+.kicker-text { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; color: #333; }
+.flone-hero-title { font-family: var(--font-display); font-size: 48px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 12px; color: #1a1a1a; }
+.flone-hero-sub { font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 24px; }
+.flone-hero-btn { border: 2px solid #333; border-radius: 0; padding: 12px 32px; text-transform: uppercase; letter-spacing: 0.8px; font-size: 11px; background: transparent; color: #333; font-weight: 600; transition: all 0.3s ease; }
+.flone-hero-btn:hover { background: #333; color: #fff; }
+
+.flone-perks { background: #fff; border-bottom: 1px solid var(--border); }
+.perks-inner { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; padding: 36px 0; }
+.perk { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 14px 0; border-right: 1px solid var(--border); text-align: center; }
+.perk:last-child { border-right: none; }
+.perk-icon { color: var(--text-primary); opacity: 0.9; }
+.perk-icon svg { width: 28px; height: 28px; display: block; }
+.perk-title { font-size: 13px; font-weight: 700; letter-spacing: 0.4px; }
+.perk-desc { font-size: 12px; color: var(--text-muted); }
+
+.flone-section { padding: 70px 0; }
+.flone-section-title { text-align: center; margin-bottom: 34px; }
+.flone-section-title h2 { font-family: var(--font-display); font-size: 28px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 8px; }
+.flone-section-title p { font-size: 13px; color: var(--text-muted); }
+.flone-products-grid { margin-top: 6px; }
+
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+
+@media (max-width: 1024px) {
+  .flone-hero-inner { grid-template-columns: 1fr; min-height: unset; }
+  .flone-hero-media { min-height: 360px; padding: 40px 20px; }
+  .flone-hero-img { max-width: 520px; transform: none; }
+  .perks-inner { grid-template-columns: 1fr; gap: 12px; }
+  .perk { border-right: none; border-bottom: 1px solid var(--border); padding: 18px 0; }
+  .perk:last-child { border-bottom: none; }
+}

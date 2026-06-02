@@ -1,0 +1,78 @@
+.shop-header-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 24px 0 28px; }
+.shop.page { padding: 0 0 80px; }
+.shop-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.shop-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; }
+.shop-count { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.shop-controls { display: flex; gap: 10px; align-items: center; }
+.sort-select { padding: 9px 14px; font-size: 13px; min-width: 180px; cursor: pointer; border: 1.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text-primary); outline: none; }
+.sort-select:focus { border-color: var(--primary); }
+.filter-toggle { position: relative; display: flex; align-items: center; gap: 6px; }
+.filter-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; position: absolute; top: -2px; right: -2px; }
+
+/* ── Layout ── */
+.shop-body {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 28px;
+  padding-bottom: 60px;
+  align-items: start;
+}
+
+/* ── Filters ── */
+.shop-filters {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 18px;
+  position: sticky;
+  top: calc(var(--nav-h, 64px) + 20px);
+}
+.filters-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.filters-header h3 { font-family: var(--font-display); font-size: 15px; font-weight: 700; }
+.filter-section { margin-bottom: 22px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+.filter-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.filter-section h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.12s;
+  user-select: none;
+}
+.filter-option:hover { background: var(--surface-2); }
+.filter-option.active { background: var(--surface-2); font-weight: 600; }
+.filter-option input { accent-color: var(--primary); cursor: pointer; }
+.price-range { display: flex; align-items: center; gap: 8px; }
+.price-range input { flex: 1; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: var(--bg); color: var(--text-primary); }
+.price-range input:focus { border-color: var(--primary); }
+.price-range span { color: var(--text-muted); flex-shrink: 0; }
+
+/* ── Products area ── */
+.shop-main { min-width: 0; }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; }
+.shop-loading { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; }
+.product-skeleton { height: 340px; background: var(--surface-2, #f3f3f3); border-radius: 14px; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+.shop-empty { text-align: center; padding: 80px 20px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 16px; font-size: 16px; }
+
+/* ── Pagination ── */
+.pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border); }
+.page-nums { display: flex; gap: 4px; }
+.page-btn { width: 36px; height: 36px; border: 1.5px solid var(--border); border-radius: 8px; background: var(--surface); cursor: pointer; font-size: 14px; font-family: var(--font-body); color: var(--text-primary); transition: all 0.15s; }
+.page-btn:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.page-btn.active { background: var(--primary); color: white; border-color: var(--primary); font-weight: 700; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .shop-body { grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+  .shop-filters { display: none; position: static; }
+  .shop-filters.open { display: block; }
+  .sort-select { min-width: 140px; }
+}
+@media (max-width: 600px) {
+  .shop-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+}
