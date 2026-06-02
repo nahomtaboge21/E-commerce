@@ -39,7 +39,7 @@ function formatOrder(o) {
 }
 
 // GET /api/orders
-app.get('/api/orders', authenticate, async (req, res) => {
+app.get('/', authenticate, async (req, res) => {
   try {
     await connectDB();
     const query = req.user.role === 'admin' ? {} : { userId: req.user.id };
@@ -49,7 +49,7 @@ app.get('/api/orders', authenticate, async (req, res) => {
 });
 
 // GET /api/orders/:id
-app.get('/api/orders/:id', authenticate, async (req, res) => {
+app.get('/:id', authenticate, async (req, res) => {
   try {
     await connectDB();
     // Support both MongoDB _id and ORD-XXXX format
@@ -69,7 +69,7 @@ app.get('/api/orders/:id', authenticate, async (req, res) => {
 });
 
 // POST /api/orders
-app.post('/api/orders', authenticate, async (req, res) => {
+app.post('/', authenticate, async (req, res) => {
   try {
     await connectDB();
     const { items, shippingAddress, paymentMethod } = req.body;
@@ -94,7 +94,7 @@ app.post('/api/orders', authenticate, async (req, res) => {
 });
 
 // PUT /api/orders/:id/status
-app.put('/api/orders/:id/status', authenticate, adminOnly, async (req, res) => {
+app.put('/:id/status', authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
     const { status } = req.body;

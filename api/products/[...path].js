@@ -25,7 +25,7 @@ function adminOnly(req, res, next) {
 const CATEGORIES = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Books', 'Beauty', 'Toys', 'Automotive'];
 
 // GET /api/products/featured
-app.get('/api/products/featured', async (req, res) => {
+app.get('/featured', async (req, res) => {
   try {
     await connectDB();
     const products = await Product.find({ featured: true }).limit(10).lean();
@@ -34,7 +34,7 @@ app.get('/api/products/featured', async (req, res) => {
 });
 
 // GET /api/products
-app.get('/api/products', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     await connectDB();
     const { search, category, minPrice, maxPrice, sortBy, page = 1, limit = 12, featured } = req.query;
@@ -69,7 +69,7 @@ app.get('/api/products', async (req, res) => {
 });
 
 // GET /api/products/:id
-app.get('/api/products/:id', async (req, res) => {
+app.get('/:id', async (req, res) => {
   try {
     await connectDB();
     const product = await Product.findById(req.params.id).lean();
@@ -80,7 +80,7 @@ app.get('/api/products/:id', async (req, res) => {
 });
 
 // POST /api/products
-app.post('/api/products', authenticate, adminOnly, async (req, res) => {
+app.post('/', authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
     const { name, category, price, originalPrice, stock, description, tags, image, images } = req.body;
@@ -92,7 +92,7 @@ app.post('/api/products', authenticate, adminOnly, async (req, res) => {
 });
 
 // PUT /api/products/:id
-app.put('/api/products/:id', authenticate, adminOnly, async (req, res) => {
+app.put('/:id', authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -102,7 +102,7 @@ app.put('/api/products/:id', authenticate, adminOnly, async (req, res) => {
 });
 
 // DELETE /api/products/:id
-app.delete('/api/products/:id', authenticate, adminOnly, async (req, res) => {
+app.delete('/:id', authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
     const product = await Product.findByIdAndDelete(req.params.id);

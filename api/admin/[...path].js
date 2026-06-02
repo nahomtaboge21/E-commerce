@@ -25,7 +25,7 @@ function adminOnly(req, res, next) {
 }
 
 // GET /api/admin/stats
-app.get('/api/admin/stats', authenticate, adminOnly, async (req, res) => {
+app.get('/stats', authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
     const [orders, products] = await Promise.all([Order.find().lean(), Product.find().lean()]);
@@ -45,7 +45,7 @@ app.get('/api/admin/stats', authenticate, adminOnly, async (req, res) => {
 });
 
 // GET /api/admin/users
-app.get('/api/admin/users', authenticate, adminOnly, async (req, res) => {
+app.get('/users', authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
     const [users, orders] = await Promise.all([User.find().select('-password').lean(), Order.find().lean()]);
@@ -58,7 +58,7 @@ app.get('/api/admin/users', authenticate, adminOnly, async (req, res) => {
 });
 
 // DELETE /api/admin/users/:id
-app.delete('/api/admin/users/:id', authenticate, adminOnly, async (req, res) => {
+app.delete('/users/:id', authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
     const user = await User.findById(req.params.id);
