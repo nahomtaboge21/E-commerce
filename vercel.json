@@ -20,6 +20,6 @@
     { "src": "/api/orders/(.*)",         "dest": "/api/orders/[...path].js" },
     { "src": "/api/orders",              "dest": "/api/orders/[...path].js" },
     { "src": "/api/admin/(.*)",          "dest": "/api/admin/[...path].js" },
-    { "src": "/(.*)",                    "dest": "/frontend/build/index.html" }
+    { "src": "/(.*)",                    "dest": "/index.html" }
   ]
 }
