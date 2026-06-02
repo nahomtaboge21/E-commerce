@@ -23,7 +23,7 @@ function authenticate(req, res, next) {
   }
 }
 
-app.post('/register', async (req, res) => {
+app.post(['/register', '/api/auth/register'], async (req, res) => {
   try {
     await connectDB();
     const { name, email, password } = req.body;
@@ -39,7 +39,7 @@ app.post('/register', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.post('/login', async (req, res) => {
+app.post(['/login', '/api/auth/login'], async (req, res) => {
   try {
     await connectDB();
     const { email, password } = req.body;
@@ -53,7 +53,7 @@ app.post('/login', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.get('/me', authenticate, async (req, res) => {
+app.get(['/me', '/api/auth/me'], authenticate, async (req, res) => {
   try {
     await connectDB();
     const user = await User.findById(req.user.id).select('-password');
@@ -62,7 +62,7 @@ app.get('/me', authenticate, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.put('/profile', authenticate, async (req, res) => {
+app.put(['/profile', '/api/auth/profile'], authenticate, async (req, res) => {
   try {
     await connectDB();
     const user = await User.findById(req.user.id);
