@@ -14,6 +14,25 @@ const TAB_ICONS = {
   users: 'users',
 };
 
+function normalizeStatsResponse(payload, users = []) {
+  if (!payload) return null;
+  if (payload.overview && payload.ordersByStatus && payload.lowStockProducts) return payload;
+
+  return {
+    overview: {
+      totalProducts: payload.totalProducts || 0,
+      totalUsers: users.filter(u => u.role === 'user').length,
+      totalOrders: payload.totalOrders || 0,
+      totalRevenue: payload.totalRevenue || 0,
+      deliveredRevenue: payload.deliveredRevenue || 0,
+    },
+    ordersByStatus: payload.statusCounts || {},
+    productsByCategory: payload.categoryCounts || {},
+    lowStockProducts: payload.lowStock || [],
+    recentOrders: payload.recentOrders || [],
+  };
+}
+
 export default function Admin() {
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -38,7 +57,10 @@ export default function Admin() {
     setLoading(true);
     try {
       const [s, u, p, o] = await Promise.all([adminAPI.getStats(), adminAPI.getUsers(), productsAPI.getAll({ limit: 100 }), ordersAPI.getAll()]);
-      setStats(s.data); setUsers(u.data); setProducts(p.data.products); setOrders(o.data);
+      setUsers(u.data || []);
+      setStats(normalizeStatsResponse(s.data, u.data || []));
+      setProducts(p.data.products || []);
+      setOrders(o.data || []);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -149,6 +171,18 @@ export default function Admin() {
           <Link to="/" className="admin-nav-btn admin-back-btn" style={{ marginTop: 'auto' }}>Back to Store</Link>
         </div>
       <div className="admin-content">
+        <div className="admin-mobile-tabs" role="tablist" aria-label="Admin sections">
+          {TABS.map(t => (
+            <button
+              key={t}
+              className={`admin-mobile-tab ${tab === t ? 'active' : ''}`}
+              onClick={() => setTab(t)}
+              type="button"
+            >
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          ))}
+        </div>
         {msg && <div className="admin-msg" onClick={() => setMsg('')}>{msg} <span className="admin-msg-close">×</span></div>}
 
         {/* DASHBOARD */}

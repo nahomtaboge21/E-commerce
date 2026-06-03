@@ -80,7 +80,7 @@ export default function Home() {
               <span className="kicker-text">Featured</span>
               <span className="kicker-line" />
             </div>
-            <h2 className="flone-hero-title">ShopWave</h2>
+            <h2 className="flone-hero-title">ShopVine</h2>
             <p className="flone-hero-sub">Everyday essentials, delivered fast.</p>
             <Link to="/shop" className="btn flone-hero-btn">Shop now</Link>
           </div>

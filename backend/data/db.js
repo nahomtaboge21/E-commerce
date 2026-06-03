@@ -26,7 +26,7 @@ const adminPassword = bcrypt.hashSync('admin123', 10);
 const userPassword = bcrypt.hashSync('user123', 10);
 
 const users = [
-  { id: 'u1', name: 'Admin User', email: 'admin@shopwave.com', password: adminPassword, role: 'admin', createdAt: '2024-01-01T00:00:00Z', avatar: 'AU' },
+  { id: 'u1', name: 'Admin User', email: 'admin@shopvine.com', password: adminPassword, role: 'admin', createdAt: '2024-01-01T00:00:00Z', avatar: 'AU' },
   { id: 'u2', name: 'Jane Smith', email: 'jane@example.com', password: userPassword, role: 'user', createdAt: '2024-03-15T10:00:00Z', avatar: 'JS' },
   { id: 'u3', name: 'Bob Johnson', email: 'bob@example.com', password: userPassword, role: 'user', createdAt: '2024-04-20T14:00:00Z', avatar: 'BJ' }
 ];

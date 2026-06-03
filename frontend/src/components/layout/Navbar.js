@@ -51,7 +51,7 @@ export default function Navbar() {
             </div>
             <div className="topbar-pill">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              support@shopwave.com
+              support@shopvine.com
             </div>
           </div>
 
@@ -121,8 +121,8 @@ export default function Navbar() {
 
       <nav className="nav-main-sticky">
       <div className="container nav-inner">
-        <Link to="/" className="nav-logo" aria-label="ShopWave home">
-          <img src={logo} alt="ShopWave" className="nav-logo-img" />
+        <Link to="/" className="nav-logo" aria-label="ShopVine home">
+          <img src={logo} alt="ShopVine" className="nav-logo-img" />
         </Link>
 
         <div className="nav-actions">
@@ -143,6 +143,29 @@ export default function Navbar() {
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
             {count > 0 && <span className="cart-badge">{count > 99 ? '99+' : count}</span>}
+          </button>
+
+          <button
+            className="btn btn-icon btn-ghost mobile-menu-btn"
+            type="button"
+            aria-label="Menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(v => !v)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              {menuOpen ? (
+                <>
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </>
+              ) : (
+                <>
+                  <path d="M3 6h18" />
+                  <path d="M3 12h18" />
+                  <path d="M3 18h18" />
+                </>
+              )}
+            </svg>
           </button>
 
           {user ? (
@@ -186,6 +209,28 @@ export default function Navbar() {
           )}
         </div>
       </div>
+      {menuOpen && (
+        <div className="nav-mobile">
+          <form className="mobile-search" onSubmit={handleSearch}>
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products" />
+            <button className="btn btn-primary btn-sm" type="submit">Go</button>
+          </form>
+          <Link to="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
+          {user ? (
+            <>
+              <Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link>
+              <Link to="/orders" onClick={() => setMenuOpen(false)}>Orders</Link>
+              {isAdmin && <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin</Link>}
+              <button type="button" onClick={() => { logout(); setMenuOpen(false); navigate('/'); }}>Sign Out</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+              <Link to="/register" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+            </>
+          )}
+        </div>
+      )}
       </nav>
     </>
   );

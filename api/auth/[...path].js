@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const connectDB = require('../../backend/lib/mongodb');
+const ensureDemoUsers = require('../../backend/lib/ensureDemoUsers');
 const User = require('../../backend/models/User');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'shopwave_jwt_secret_2024';
@@ -26,6 +27,7 @@ function authenticate(req, res, next) {
 app.post(['/register', '/api/auth/register'], async (req, res) => {
   try {
     await connectDB();
+    await ensureDemoUsers();
     const { name, email, password } = req.body;
     if (!name || !email || !password) return res.status(400).json({ error: 'All fields required' });
     if (password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
@@ -42,6 +44,7 @@ app.post(['/register', '/api/auth/register'], async (req, res) => {
 app.post(['/login', '/api/auth/login'], async (req, res) => {
   try {
     await connectDB();
+    await ensureDemoUsers();
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
     const user = await User.findOne({ email: email.toLowerCase() });
@@ -56,6 +59,7 @@ app.post(['/login', '/api/auth/login'], async (req, res) => {
 app.get(['/me', '/api/auth/me'], authenticate, async (req, res) => {
   try {
     await connectDB();
+    await ensureDemoUsers();
     const user = await User.findById(req.user.id).select('-password');
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json({ id: user._id, name: user.name, email: user.email, role: user.role, avatar: user.avatar });

@@ -40,13 +40,13 @@ async function seed() {
   const adminPass = await bcrypt.hash('admin123', 10);
   const userPass  = await bcrypt.hash('user123', 10);
   await User.insertMany([
-    { name: 'Admin User',  email: 'admin@shopwave.com', password: adminPass, role: 'admin', avatar: 'AU' },
+    { name: 'Admin User',  email: 'admin@shopvine.com', password: adminPass, role: 'admin', avatar: 'AU' },
     { name: 'Jane Smith',  email: 'jane@example.com',   password: userPass,  role: 'user',  avatar: 'JS' },
     { name: 'Bob Johnson', email: 'bob@example.com',    password: userPass,  role: 'user',  avatar: 'BJ' },
   ]);
   console.log('Seeded 3 users');
   console.log('\nDone! ✅');
-  console.log('Admin:  admin@shopwave.com / admin123');
+  console.log('Admin:  admin@shopvine.com / admin123');
   console.log('User:   jane@example.com / user123');
   process.exit(0);
 }

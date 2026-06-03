@@ -43,7 +43,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🚀 ShopWave running at http://localhost:${PORT}`);
+  console.log(`\n🚀 ShopVine running at http://localhost:${PORT}`);
   console.log(`📦 ${require('./data/db').products.length} products loaded`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}\n`);
 });

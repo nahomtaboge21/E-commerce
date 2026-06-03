@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="container footer-inner">
         <div className="footer-brand">
           <Link to="/" className="footer-logo">
-            ShopWave<span className="footer-dot">.</span>
+            ShopVine<span className="footer-dot">.</span>
           </Link>
           <p>Simple shopping, fast shipping, easy returns.</p>
         </div>
@@ -49,7 +49,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <div className="container">
-          <p>© {new Date().getFullYear()} ShopWave. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} ShopVine. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const connectDB = require('../../backend/lib/mongodb');
+const ensureDemoProducts = require('../../backend/lib/ensureDemoProducts');
+const ensureDemoUsers = require('../../backend/lib/ensureDemoUsers');
 const User = require('../../backend/models/User');
 const Order = require('../../backend/models/Order');
 const Product = require('../../backend/models/Product');
@@ -28,7 +30,12 @@ function adminOnly(req, res, next) {
 app.get(['/stats', '/api/admin/stats'], authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
-    const [orders, products] = await Promise.all([Order.find().lean(), Product.find().lean()]);
+    await Promise.all([ensureDemoUsers(), ensureDemoProducts()]);
+    const [users, orders, products] = await Promise.all([
+      User.find().select('-password').lean(),
+      Order.find().lean(),
+      Product.find().lean()
+    ]);
     const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
     const deliveredRevenue = orders.filter(o => o.status === 'delivered').reduce((s, o) => s + o.total, 0);
     const statusCounts = orders.reduce((acc, o) => { acc[o.status] = (acc[o.status] || 0) + 1; return acc; }, {});
@@ -40,7 +47,19 @@ app.get(['/stats', '/api/admin/stats'], authenticate, adminOnly, async (req, res
       total: o.total, status: o.status, createdAt: o.createdAt,
       items: o.items,
     }));
-    res.json({ totalRevenue, deliveredRevenue, totalOrders: orders.length, statusCounts, totalProducts: products.length, categoryCounts, lowStock, recentOrders });
+    res.json({
+      overview: {
+        totalProducts: products.length,
+        totalUsers: users.filter(u => u.role === 'user').length,
+        totalOrders: orders.length,
+        totalRevenue: Math.round(totalRevenue * 100) / 100,
+        deliveredRevenue: Math.round(deliveredRevenue * 100) / 100
+      },
+      ordersByStatus: statusCounts,
+      productsByCategory: categoryCounts,
+      lowStockProducts: lowStock,
+      recentOrders
+    });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -48,6 +67,7 @@ app.get(['/stats', '/api/admin/stats'], authenticate, adminOnly, async (req, res
 app.get(['/users', '/api/admin/users'], authenticate, adminOnly, async (req, res) => {
   try {
     await connectDB();
+    await ensureDemoUsers();
     const [users, orders] = await Promise.all([User.find().select('-password').lean(), Order.find().lean()]);
     const result = users.map(u => ({
       id: u._id, name: u.name, email: u.email, role: u.role, avatar: u.avatar, createdAt: u.createdAt,

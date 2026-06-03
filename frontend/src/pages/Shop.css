@@ -74,5 +74,15 @@
   .sort-select { min-width: 140px; }
 }
 @media (max-width: 600px) {
+  .shop-header-bar { padding: 18px 0 22px; }
+  .shop-title { font-size: 20px; }
+  .shop-controls { width: 100%; }
+  .filter-toggle, .sort-select { flex: 1; justify-content: center; min-height: 44px; }
+  .shop-filters { padding: 18px 14px; border-radius: 12px; }
+  .price-range { flex-wrap: wrap; }
+  .price-range span { width: 100%; text-align: center; }
   .shop-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .shop-loading { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .pagination { flex-wrap: wrap; gap: 10px; }
+  .page-nums { width: 100%; justify-content: center; flex-wrap: wrap; }
 }

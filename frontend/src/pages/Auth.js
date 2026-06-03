@@ -27,7 +27,7 @@ export function Login() {
   return (
     <div className="auth-page page">
       <div className="auth-card card">
-        <div className="auth-logo"><span>⬡</span> ShopWave</div>
+        <div className="auth-logo"><span>⬡</span> ShopVine</div>
         <h1>Welcome back</h1>
         <p className="auth-sub">Sign in to your account</p>
         <form onSubmit={handleSubmit}>
@@ -41,7 +41,7 @@ export function Login() {
         <div className="auth-demo">
           <p>Demo credentials:</p>
           <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:6}}>
-            <button className="btn btn-outline btn-sm" onClick={()=>setForm({email:'admin@shopwave.com',password:'admin123'})}>Use Admin</button>
+            <button className="btn btn-outline btn-sm" onClick={()=>setForm({email:'admin@shopvine.com',password:'admin123'})}>Use Admin</button>
             <button className="btn btn-outline btn-sm" onClick={()=>setForm({email:'jane@example.com',password:'user123'})}>Use User</button>
           </div>
         </div>
@@ -76,7 +76,7 @@ export function Register() {
   return (
     <div className="auth-page page">
       <div className="auth-card card">
-        <div className="auth-logo"><span>⬡</span> ShopWave</div>
+        <div className="auth-logo"><span>⬡</span> ShopVine</div>
         <h1>Create account</h1>
         <p className="auth-sub">Start shopping today</p>
         <form onSubmit={handleSubmit}>
