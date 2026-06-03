@@ -1,25 +1,12 @@
 {
   "version": 2,
-  "builds": [
+  "installCommand": "npm install && npm install --prefix frontend",
+  "buildCommand": "npm run build --prefix frontend",
+  "outputDirectory": "frontend/build",
+  "rewrites": [
     {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "build" }
-    },
-    { "src": "api/auth/[...path].js",     "use": "@vercel/node" },
-    { "src": "api/products/[...path].js", "use": "@vercel/node" },
-    { "src": "api/orders/[...path].js",   "use": "@vercel/node" },
-    { "src": "api/admin/[...path].js",    "use": "@vercel/node" },
-    { "src": "api/health.js",             "use": "@vercel/node" }
-  ],
-  "routes": [
-    { "src": "/api/health",              "dest": "/api/health.js" },
-    { "src": "/api/auth/(.*)",           "dest": "/api/auth/[...path].js" },
-    { "src": "/api/products/(.*)",       "dest": "/api/products/[...path].js" },
-    { "src": "/api/products",            "dest": "/api/products/[...path].js" },
-    { "src": "/api/orders/(.*)",         "dest": "/api/orders/[...path].js" },
-    { "src": "/api/orders",              "dest": "/api/orders/[...path].js" },
-    { "src": "/api/admin/(.*)",          "dest": "/api/admin/[...path].js" },
-    { "src": "/(.*)",                    "dest": "/index.html" }
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
   ]
 }
