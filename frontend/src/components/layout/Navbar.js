@@ -197,9 +197,8 @@ export default function Navbar() {
                     </div>
                   </div>
                   <div className="dropdown-divider" />
-                  <Link to="/profile" className="dropdown-item" onClick={() => setUserMenuOpen(false)}>My Profile</Link>
-                  <Link to="/orders" className="dropdown-item" onClick={() => setUserMenuOpen(false)}>My Orders</Link>
-                  {isAdmin && <Link to="/admin" className="dropdown-item dropdown-admin" onClick={() => setUserMenuOpen(false)}>Admin Dashboard</Link>}
+                  <Link to="/profile" className="dropdown-item" onClick={() => setUserMenuOpen(false)}>Profile</Link>
+                  <Link to="/orders" className="dropdown-item" onClick={() => setUserMenuOpen(false)}>Recent Orders</Link>
                   <div className="dropdown-divider" />
                   <button
                     className="dropdown-item dropdown-logout"
@@ -216,10 +215,7 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="auth-btns">
-              <Link to="/login" className="btn btn-ghost btn-sm">Login</Link>
-              <Link to="/register" className="btn btn-primary btn-sm">Sign Up</Link>
-            </div>
+            <div />
           )}
         </div>
       </div>
@@ -233,14 +229,12 @@ export default function Navbar() {
           {user ? (
             <>
               <Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link>
-              <Link to="/orders" onClick={() => setMenuOpen(false)}>Orders</Link>
-              {isAdmin && <Link to="/admin" onClick={() => setMenuOpen(false)}>Admin</Link>}
+              <Link to="/orders" onClick={() => setMenuOpen(false)}>Recent Orders</Link>
               <button type="button" onClick={() => { logout(); setMenuOpen(false); navigate('/'); }}>Sign Out</button>
             </>
           ) : (
             <>
-              <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
-              <Link to="/register" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+              <Link to="/orders" onClick={() => setMenuOpen(false)}>Recent Orders</Link>
             </>
           )}
         </div>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ordersAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
+import { downloadReceipt, getRecentOrders } from '../utils/recentOrders';
 
 const STATUS_STYLES = { processing: 'badge-info', confirmed: 'badge-info', shipped: 'badge-warning', delivered: 'badge-success', cancelled: 'badge-danger' };
 
@@ -9,23 +10,26 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) { navigate('/login?redirect=/orders'); return; }
+    if (!user) {
+      setOrders(getRecentOrders());
+      setLoading(false);
+      return;
+    }
     ordersAPI.getAll().then(r => setOrders(r.data)).catch(console.error).finally(() => setLoading(false));
-  }, [user, navigate]);
+  }, [user]);
 
   return (
     <div className="page" style={{padding:'40px 0 80px'}}>
       <div className="container" style={{maxWidth:860}}>
-        <h1 style={{fontFamily:'var(--font-display)',fontSize:32,fontWeight:800,marginBottom:8}}>My Orders</h1>
+        <h1 style={{fontFamily:'var(--font-display)',fontSize:32,fontWeight:800,marginBottom:8}}>{user ? 'Orders' : 'Recent Orders'}</h1>
         <p style={{color:'var(--text-secondary)',marginBottom:32}}>{orders.length} orders</p>
 
         {loading ? <div style={{display:'flex',justifyContent:'center',padding:'60px'}}><div className="spinner"/></div>
         : orders.length === 0 ? (
           <div style={{textAlign:'center',padding:'80px 20px'}}>
-            <p style={{fontSize:16,color:'var(--text-muted)',marginBottom:20}}>No orders yet</p>
+            <p style={{fontSize:16,color:'var(--text-muted)',marginBottom:20}}>No recent orders yet</p>
             <Link to="/shop" className="btn btn-primary">Start Shopping</Link>
           </div>
         ) : (
@@ -49,6 +53,9 @@ export default function Orders() {
                       <div><p style={{fontSize:13,fontWeight:500}}>{item.name}</p><p style={{fontSize:12,color:'var(--text-muted)'}}>×{item.quantity} · ${item.price.toFixed(2)} each</p></div>
                     </div>
                   ))}
+                </div>
+                <div style={{display:'flex',justifyContent:'flex-end',marginTop:16}}>
+                  <button type="button" className="btn btn-outline btn-sm" onClick={() => downloadReceipt(order)}>Download Receipt</button>
                 </div>
               </div>
             ))}

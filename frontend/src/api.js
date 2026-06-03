@@ -14,7 +14,9 @@ api.interceptors.response.use(
     if (err.response?.status === 401) {
       localStorage.removeItem('shopwave_token');
       localStorage.removeItem('shopwave_user');
-      window.location.href = '/login';
+      if (window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/profile')) {
+        window.location.href = '/login?redirect=/admin';
+      }
     }
     return Promise.reject(err);
   }
@@ -38,7 +40,7 @@ export const productsAPI = {
 
 export const ordersAPI = {
   getAll: () => api.get('/orders'),
-  getById: (id) => api.get(`/orders/${id}`),
+  getById: (id, token) => api.get(`/orders/${id}`, { params: token ? { token } : undefined }),
   create: (data) => api.post('/orders', data),
   updateStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
 };

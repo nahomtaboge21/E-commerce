@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { ordersAPI } from '../api';
+import { downloadReceipt, findRecentOrder } from '../utils/recentOrders';
 import './OrderConfirmation.css';
 
 const STATUS_META = {
@@ -13,15 +14,17 @@ const STATUS_META = {
 
 export function OrderConfirmation() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    ordersAPI.getById(id)
+    const token = searchParams.get('token');
+    ordersAPI.getById(id, token)
       .then(r => setOrder(r.data))
-      .catch(console.error)
+      .catch(() => setOrder(findRecentOrder(id)))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, searchParams]);
 
   if (loading) return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -32,7 +35,7 @@ export function OrderConfirmation() {
   if (!order) return (
     <div style={{ textAlign: 'center', padding: '80px 0' }}>
       <p style={{ color: 'var(--text-muted)' }}>Order not found.</p>
-      <Link to="/orders" className="btn btn-primary" style={{ marginTop: 16 }}>View Orders</Link>
+      <Link to="/orders" className="btn btn-primary" style={{ marginTop: 16 }}>Recent Orders</Link>
     </div>
   );
 
@@ -116,7 +119,7 @@ export function OrderConfirmation() {
 
           {/* ── Actions ── */}
           <div className="oc-actions">
-            <Link to="/orders" className="btn btn-outline">View All Orders</Link>
+            <button type="button" className="btn btn-outline" onClick={() => downloadReceipt(order)}>Download Receipt</button>
             <Link to="/shop" className="btn btn-primary">Continue Shopping</Link>
           </div>
 

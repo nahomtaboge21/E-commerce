@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const connectDB = require('../../backend/lib/mongodb');
@@ -23,12 +24,22 @@ function adminOnly(req, res, next) {
   next();
 }
 
+function optionalAuthenticate(req, res, next) {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) return next();
+  try { req.user = jwt.verify(token, JWT_SECRET); next(); }
+  catch { return res.status(403).json({ error: 'Invalid or expired token' }); }
+}
+
 function formatOrder(o) {
   return {
     id: 'ORD-' + o._id.toString().slice(-6).toUpperCase(),
     _id: o._id,
     userId: o.userId,
     userName: o.userName,
+    customerName: o.customerName,
+    customerEmail: o.customerEmail,
+    publicToken: o.publicToken,
     items: o.items,
     total: o.total,
     status: o.status,
@@ -49,7 +60,7 @@ app.get(['/', '/api/orders'], authenticate, async (req, res) => {
 });
 
 // GET /api/orders/:id
-app.get(['/:id', '/api/orders/:id'], authenticate, async (req, res) => {
+app.get(['/:id', '/api/orders/:id'], optionalAuthenticate, async (req, res) => {
   try {
     await connectDB();
     // Support both MongoDB _id and ORD-XXXX format
@@ -62,19 +73,25 @@ app.get(['/:id', '/api/orders/:id'], authenticate, async (req, res) => {
       order = await Order.findById(req.params.id).lean();
     }
     if (!order) return res.status(404).json({ error: 'Order not found' });
-    if (req.user.role !== 'admin' && order.userId.toString() !== req.user.id.toString())
+    if (req.user) {
+      if (req.user.role !== 'admin' && order.userId?.toString() !== req.user.id.toString()) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+    } else if (req.query.token !== order.publicToken) {
       return res.status(403).json({ error: 'Access denied' });
+    }
     res.json(formatOrder(order));
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // POST /api/orders
-app.post(['/', '/api/orders'], authenticate, async (req, res) => {
+app.post(['/', '/api/orders'], optionalAuthenticate, async (req, res) => {
   try {
     await connectDB();
-    const { items, shippingAddress, paymentMethod } = req.body;
+    const { items, shippingAddress, paymentMethod, customerName, customerEmail } = req.body;
     if (!items?.length) return res.status(400).json({ error: 'Order must have items' });
     if (!shippingAddress) return res.status(400).json({ error: 'Shipping address required' });
+    if (!req.user && (!customerName || !customerEmail)) return res.status(400).json({ error: 'Customer details required' });
 
     const enrichedItems = [];
     let total = 0;
@@ -88,7 +105,17 @@ app.post(['/', '/api/orders'], authenticate, async (req, res) => {
       total += product.price * item.quantity;
     }
 
-    const order = await Order.create({ userId: req.user.id, userName: req.user.name, items: enrichedItems, total: Math.round(total * 100) / 100, shippingAddress, paymentMethod: paymentMethod || 'card' });
+    const order = await Order.create({
+      userId: req.user?.id,
+      userName: req.user?.name || customerName,
+      customerName: customerName || req.user?.name,
+      customerEmail: customerEmail || req.user?.email,
+      publicToken: crypto.randomUUID(),
+      items: enrichedItems,
+      total: Math.round(total * 100) / 100,
+      shippingAddress,
+      paymentMethod: paymentMethod || 'card'
+    });
     res.status(201).json(formatOrder(order.toObject()));
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

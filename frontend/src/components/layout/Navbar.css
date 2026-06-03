@@ -123,6 +123,7 @@
 .mobile-search { display: flex; gap: 8px; margin-bottom: 8px; }
 .mobile-search input { flex: 1; padding: 9px 14px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 14px; outline: none; font-family: var(--font-body); }
 .shop-now-btn { border-radius: 999px; padding: 8px 20px; font-size: 13px; letter-spacing: 0.4px; }
+@media (min-width: 641px) { .nav-mobile { display: none !important; } .mobile-menu-btn { display: none !important; } }
 @media (max-width: 700px) { .topbar-left { display: none; } .topbar-right { display: none; } .topbar-inner { padding: 6px 0; } .topbar-marquee-wrap { width: 100%; mask-image: none; -webkit-mask-image: none; } .topbar-marquee { gap: 20px; font-size: 11px; } .topbar-marquee-item { gap: 5px; } .nav-inner { height: 68px; gap: 12px; } .nav-logo-img { height: 44px; } .nav-actions { gap: 4px; } }
 @media (max-width: 640px) { .nav-search { display: none; } .auth-btns { display: none; } .shop-now-btn { display: none; } .mobile-menu-btn { display: inline-flex; } .nav-mobile { display: flex; padding: 12px; } .nav-mobile a, .nav-mobile button { min-height: 44px; padding: 12px 14px; } .mobile-search { flex-direction: column; } .mobile-search .btn { width: 100%; justify-content: center; } }
 @media (max-width: 480px) { .topbar-inner { padding: 5px 0; } .topbar-marquee { gap: 16px; font-size: 10.5px; animation-duration: 22s; } .topbar-dot { font-size: 14px; } .topbar-marquee-item svg { width: 11px; height: 11px; } }

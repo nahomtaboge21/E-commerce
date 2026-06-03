@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../api';
+import { saveRecentOrder } from '../utils/recentOrders';
 import './Checkout.css';
 
 function formatCard(val) {
@@ -122,10 +123,10 @@ function StepShipping({ form, set, errors }) {
 }
 
 const PAYMENT_METHODS = [
-  { id: 'card',     label: 'Credit / Debit Card' },
-  { id: 'paypal',   label: 'PayPal' },
+  { id: 'card', label: 'Credit / Debit Card' },
+  { id: 'paypal', label: 'PayPal' },
   { id: 'applepay', label: 'Apple Pay' },
-  { id: 'cod',      label: 'Cash on Delivery' },
+  { id: 'cod', label: 'Cash on Delivery' },
 ];
 
 function VisaIcon() {
@@ -193,10 +194,7 @@ function StepPayment({ form, set, errors }) {
 
       <div className="ck-methods">
         {PAYMENT_METHODS.map(pm => (
-          <button key={pm.id} type="button"
-            className={`ck-method-btn${method === pm.id ? ' selected' : ''}`}
-            onClick={() => set('paymentMethod', pm.id)}
-          >
+          <button key={pm.id} type="button" className={`ck-method-btn${method === pm.id ? ' selected' : ''}`} onClick={() => set('paymentMethod', pm.id)}>
             <span className={`ck-method-radio${method === pm.id ? ' checked' : ''}`}/>
             <span className="ck-method-label">{pm.label}</span>
             {pm.id === 'card' && <span className="ck-method-cards"><VisaIcon/><MastercardIcon/></span>}
@@ -218,31 +216,16 @@ function StepPayment({ form, set, errors }) {
               <input className={`ck-input${errors.cardExpiry ? ' ck-input-err' : ''}`} value={form.cardExpiry} onChange={e => set('cardExpiry', formatExpiry(e.target.value))} placeholder="MM/YY" inputMode="numeric" autoComplete="cc-exp" />
             </Field>
             <Field label="CVV" error={errors.cardCvv}>
-              <input className={`ck-input${errors.cardCvv ? ' ck-input-err' : ''}`} value={form.cardCvv} onChange={e => set('cardCvv', e.target.value.replace(/\D/g,'').slice(0,4))} placeholder="•••" inputMode="numeric" type="password" autoComplete="cc-csc" />
+              <input className={`ck-input${errors.cardCvv ? ' ck-input-err' : ''}`} value={form.cardCvv} onChange={e => set('cardCvv', e.target.value.replace(/\D/g,'').slice(0,4))} placeholder="***" inputMode="numeric" type="password" autoComplete="cc-csc" />
             </Field>
           </div>
-          <p className="ck-demo-hint">Demo mode — no real payment is processed.</p>
+          <p className="ck-demo-hint">Demo mode - no real payment is processed.</p>
         </div>
       )}
 
-      {method === 'paypal' && (
-        <div className="ck-alt-method-msg">
-          <PayPalIcon/>
-          <p>You'll be redirected to PayPal to complete your payment securely.</p>
-        </div>
-      )}
-      {method === 'applepay' && (
-        <div className="ck-alt-method-msg">
-          <ApplePayIcon/>
-          <p>Confirm payment using Face ID or Touch ID on your Apple device.</p>
-        </div>
-      )}
-      {method === 'cod' && (
-        <div className="ck-alt-method-msg ck-cod-msg">
-          <CodIcon/>
-          <p>Pay in cash when your order is delivered. No online payment needed.</p>
-        </div>
-      )}
+      {method === 'paypal' && <div className="ck-alt-method-msg"><PayPalIcon/><p>You'll be redirected to PayPal to complete your payment securely.</p></div>}
+      {method === 'applepay' && <div className="ck-alt-method-msg"><ApplePayIcon/><p>Confirm payment using Face ID or Touch ID on your Apple device.</p></div>}
+      {method === 'cod' && <div className="ck-alt-method-msg ck-cod-msg"><CodIcon/><p>Pay in cash when your order is delivered. No online payment needed.</p></div>}
     </div>
   );
 }
@@ -269,7 +252,7 @@ function StepReview({ form, items, error, setStep }) {
         </div>
         <p className="ck-review-val">
           {methodLabel}
-          {method === 'card' && form.cardNumber && <> &nbsp;·&nbsp; •••• {form.cardNumber.replace(/\s/g,'').slice(-4)}</>}
+          {method === 'card' && form.cardNumber && <> &nbsp;·&nbsp; **** {form.cardNumber.replace(/\s/g,'').slice(-4)}</>}
         </p>
       </div>
       <div className="ck-review-items">
@@ -284,17 +267,11 @@ function StepReview({ form, items, error, setStep }) {
           </div>
         ))}
       </div>
-      {error && (
-        <div className="ck-error-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          {error}
-        </div>
-      )}
+      {error && <div className="ck-error-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>{error}</div>}
     </div>
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
 export default function Checkout() {
   const { items, total, clearCart } = useCart();
   const { user } = useAuth();
@@ -326,7 +303,7 @@ export default function Checkout() {
   if (!items.length) return (
     <div className="ck-empty page">
       <div className="container">
-        <div className="ck-empty-icon">🛒</div>
+        <div className="ck-empty-icon">Cart</div>
         <h2>Your cart is empty</h2>
         <p>Add some items before checking out.</p>
         <Link to="/shop" className="btn btn-primary">Browse Shop</Link>
@@ -334,43 +311,29 @@ export default function Checkout() {
     </div>
   );
 
-  if (!user) return (
-    <div className="ck-empty page">
-      <div className="container">
-        <div className="ck-empty-icon">🔒</div>
-        <h2>Sign in to checkout</h2>
-        <p>You need an account to complete your purchase.</p>
-        <div className="ck-auth-btns">
-          <Link to="/login?redirect=/checkout" className="btn btn-primary">Sign In</Link>
-          <Link to="/register?redirect=/checkout" className="btn btn-outline">Create Account</Link>
-        </div>
-      </div>
-    </div>
-  );
-
   function validateStep(s) {
-    const e = {};
+    const nextErrors = {};
     if (s === 1) {
-      if (!form.firstName.trim()) e.firstName = 'Required';
-      if (!form.lastName.trim()) e.lastName = 'Required';
-      if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Valid email required';
-      if (!form.street.trim()) e.street = 'Required';
-      if (!form.city.trim()) e.city = 'Required';
-      if (!form.state.trim()) e.state = 'Required';
-      if (!form.zip.trim()) e.zip = 'Required';
+      if (!form.firstName.trim()) nextErrors.firstName = 'Required';
+      if (!form.lastName.trim()) nextErrors.lastName = 'Required';
+      if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) nextErrors.email = 'Valid email required';
+      if (!form.street.trim()) nextErrors.street = 'Required';
+      if (!form.city.trim()) nextErrors.city = 'Required';
+      if (!form.state.trim()) nextErrors.state = 'Required';
+      if (!form.zip.trim()) nextErrors.zip = 'Required';
     }
     if (s === 2 && form.paymentMethod === 'card') {
-      if (form.cardNumber.replace(/\s/g,'').length < 16) e.cardNumber = 'Enter a valid 16-digit card number';
-      if (!form.cardName.trim()) e.cardName = 'Required';
-      if (form.cardExpiry.length < 5) e.cardExpiry = 'Enter MM/YY';
-      if (form.cardCvv.length < 3) e.cardCvv = 'Enter CVV';
+      if (form.cardNumber.replace(/\s/g, '').length < 16) nextErrors.cardNumber = 'Enter a valid 16-digit card number';
+      if (!form.cardName.trim()) nextErrors.cardName = 'Required';
+      if (form.cardExpiry.length < 5) nextErrors.cardExpiry = 'Enter MM/YY';
+      if (form.cardCvv.length < 3) nextErrors.cardCvv = 'Enter CVV';
     }
-    return e;
+    return nextErrors;
   }
 
   function next() {
-    const e = validateStep(step);
-    if (Object.keys(e).length) { setErrors(e); return; }
+    const nextErrors = validateStep(step);
+    if (Object.keys(nextErrors).length) { setErrors(nextErrors); return; }
     setStep(s => s + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -381,15 +344,19 @@ export default function Checkout() {
   }
 
   async function placeOrder() {
-    setLoading(true); setError('');
+    setLoading(true);
+    setError('');
     try {
       const res = await ordersAPI.create({
         items: items.map(i => ({ productId: i.id, quantity: i.quantity })),
         shippingAddress: { street: form.street, city: form.city, state: form.state, zip: form.zip, country: form.country },
         paymentMethod: form.paymentMethod,
+        customerName: `${form.firstName} ${form.lastName}`.trim(),
+        customerEmail: form.email,
       });
+      saveRecentOrder(res.data);
       clearCart();
-      navigate(`/order-confirmation/${res.data.id}`);
+      navigate(`/order-confirmation/${res.data.id}?token=${encodeURIComponent(res.data.publicToken || '')}`);
     } catch (err) {
       setError(err.response?.data?.error || 'Something went wrong. Please try again.');
       setLoading(false);
@@ -405,11 +372,11 @@ export default function Checkout() {
           {step === 2 && <StepPayment form={form} set={set} errors={errors} />}
           {step === 3 && <StepReview form={form} items={items} error={error} setStep={setStep} />}
           <div className="ck-nav">
-            {step > 1 && <button type="button" className="btn btn-outline" onClick={back}>← Back</button>}
-            {step < 3 && <button type="button" className="btn btn-primary ck-btn-continue" onClick={next}>Continue →</button>}
+            {step > 1 && <button type="button" className="btn btn-outline" onClick={back}>Back</button>}
+            {step < 3 && <button type="button" className="btn btn-primary ck-btn-continue" onClick={next}>Continue</button>}
             {step === 3 && (
               <button type="button" className="btn btn-primary ck-btn-continue" onClick={placeOrder} disabled={loading}>
-                {loading ? <><span className="spinner" style={{width:16,height:16}}/> Processing…</> : `Place Order — $${orderTotal.toFixed(2)}`}
+                {loading ? <><span className="spinner" style={{ width: 16, height: 16 }}/> Processing...</> : `Place Order - $${orderTotal.toFixed(2)}`}
               </button>
             )}
           </div>
