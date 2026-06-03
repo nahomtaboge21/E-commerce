@@ -90,7 +90,7 @@ export default function Home() {
       <section className="flone-perks">
         <div className="container perks-inner">
           {[
-            { icon: 'shipping', title: 'Free Shipping', desc: 'On all orders over $50' },
+            { icon: 'shipping', title: 'Free Shipping', desc: 'On all orders over $200' },
             { icon: 'support', title: 'Support 24/7', desc: 'We are here to help' },
             { icon: 'returns', title: 'Money Return', desc: '30-day money back' },
           ].map(p => (

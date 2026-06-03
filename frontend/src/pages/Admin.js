@@ -188,7 +188,23 @@ export default function Admin() {
         {/* DASHBOARD */}
         {tab === 'dashboard' && stats && (
           <div>
-            <h1 className="admin-title">Dashboard</h1>
+            <div className="admin-hero">
+              <div>
+                <p className="admin-eyebrow">Operations</p>
+                <h1 className="admin-title" style={{ marginBottom: 10 }}>Dashboard</h1>
+                <p className="admin-subtitle">Monitor revenue, fulfillment, inventory pressure, and customer activity in one place.</p>
+              </div>
+              <div className="admin-hero-metrics">
+                <div className="admin-hero-chip">
+                  <span className="admin-hero-chip-label">Live orders</span>
+                  <strong>{stats.ordersByStatus.processing || 0}</strong>
+                </div>
+                <div className="admin-hero-chip">
+                  <span className="admin-hero-chip-label">Low stock</span>
+                  <strong>{stats.lowStockProducts.length}</strong>
+                </div>
+              </div>
+            </div>
             <div className="stats-grid">
               {[
                 { label: 'Total Revenue', value: `$${stats.overview.totalRevenue.toLocaleString()}`, type: 'revenue', sub: `$${stats.overview.deliveredRevenue.toLocaleString()} delivered` },
@@ -204,11 +220,11 @@ export default function Admin() {
             </div>
 
             <div className="admin-two-col">
-              <div className="card" style={{ padding: 24 }}>
+              <div className="card admin-panel-card" style={{ padding: 24 }}>
                 <h3 className="admin-section-title">Recent Orders</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {stats.recentOrders.map(o => (
-                    <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>
+                    <div key={o.id} className="admin-order-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>
                       <div><p style={{ fontWeight: 600, fontSize: 14 }}>{o.id}</p><p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{new Date(o.createdAt).toLocaleDateString()}</p></div>
                       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                         <span className={`badge ${STATUS_COLORS[o.status]}`}>{o.status}</span>
@@ -219,10 +235,10 @@ export default function Admin() {
                 </div>
               </div>
 
-              <div className="card" style={{ padding: 24 }}>
+              <div className="card admin-panel-card" style={{ padding: 24 }}>
                 <h3 className="admin-section-title">Orders by Status</h3>
                 {Object.entries(stats.ordersByStatus).map(([status, count]) => (
-                  <div key={status} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <div key={status} className="admin-status-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                     <span className={`badge ${STATUS_COLORS[status]}`}>{status}</span>
                     <div style={{ flex: 1, margin: '0 12px', height: 6, background: 'var(--surface-3)', borderRadius: 3, overflow: 'hidden' }}>
                       <div style={{ width: `${(count / stats.overview.totalOrders) * 100}%`, height: '100%', background: 'var(--primary)', borderRadius: 3 }} />
@@ -248,13 +264,13 @@ export default function Admin() {
         {/* PRODUCTS */}
         {tab === 'products' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+            <div className="admin-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
               <h1 className="admin-title" style={{ margin: 0 }}>Products ({products.length})</h1>
               <button className="btn btn-accent" onClick={openCreate}>+ Add Product</button>
             </div>
 
             {formOpen && (
-              <div className="card" style={{ padding: 28, marginBottom: 24 }}>
+              <div className="card admin-editor-card" style={{ padding: 28, marginBottom: 24 }}>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, marginBottom: 20 }}>{editingProduct ? 'Edit Product' : 'New Product'}</h3>
                 <form onSubmit={handleSaveProduct}>
                   <div className="form-row-3">
@@ -321,7 +337,9 @@ export default function Admin() {
         {/* ORDERS */}
         {tab === 'orders' && (
           <div>
-            <h1 className="admin-title">Orders ({orders.length})</h1>
+            <div className="admin-header-row">
+              <h1 className="admin-title">Orders ({orders.length})</h1>
+            </div>
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead><tr><th>Order ID</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th></tr></thead>
@@ -348,7 +366,9 @@ export default function Admin() {
         {/* USERS */}
         {tab === 'users' && (
           <div>
-            <h1 className="admin-title">Users ({users.length})</h1>
+            <div className="admin-header-row">
+              <h1 className="admin-title">Users ({users.length})</h1>
+            </div>
             <div className="admin-table-wrap">
               <table className="admin-table">
                 <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Orders</th><th>Joined</th><th>Actions</th></tr></thead>
