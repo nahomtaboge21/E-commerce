@@ -14,6 +14,7 @@ export default function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [lang, setLang] = useState('English');
   const [currency, setCurrency] = useState('USD');
+  const [isPhone, setIsPhone] = useState(() => window.innerWidth <= 640);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +31,17 @@ export default function Navbar() {
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const nextIsPhone = window.innerWidth <= 640;
+      setIsPhone(nextIsPhone);
+      if (!nextIsPhone) setMenuOpen(false);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleSearch = (e) => {
@@ -145,28 +157,30 @@ export default function Navbar() {
             {count > 0 && <span className="cart-badge">{count > 99 ? '99+' : count}</span>}
           </button>
 
-          <button
-            className="btn btn-icon btn-ghost mobile-menu-btn"
-            type="button"
-            aria-label="Menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(v => !v)}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              {menuOpen ? (
-                <>
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </>
-              ) : (
-                <>
-                  <path d="M3 6h18" />
-                  <path d="M3 12h18" />
-                  <path d="M3 18h18" />
-                </>
-              )}
-            </svg>
-          </button>
+          {isPhone && (
+            <button
+              className="btn btn-icon btn-ghost mobile-menu-btn"
+              type="button"
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(v => !v)}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                {menuOpen ? (
+                  <>
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </>
+                ) : (
+                  <>
+                    <path d="M3 6h18" />
+                    <path d="M3 12h18" />
+                    <path d="M3 18h18" />
+                  </>
+                )}
+              </svg>
+            </button>
+          )}
 
           {user ? (
             <div className="user-menu-wrap" ref={userMenuRef}>
@@ -209,7 +223,7 @@ export default function Navbar() {
           )}
         </div>
       </div>
-      {menuOpen && (
+      {isPhone && menuOpen && (
         <div className="nav-mobile">
           <form className="mobile-search" onSubmit={handleSearch}>
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products" />
