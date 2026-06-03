@@ -11,7 +11,7 @@ export default function Profile() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  if (!user) { navigate('/login'); return null; }
+  if (!user) { navigate('/login?redirect=/admin'); return null; }
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ export default function Profile() {
   return (
     <div className="page" style={{padding:'40px 0 80px'}}>
       <div className="container" style={{maxWidth:640}}>
-        <h1 style={{fontFamily:'var(--font-display)',fontSize:32,fontWeight:800,marginBottom:32}}>My Profile</h1>
+        <h1 style={{fontFamily:'var(--font-display)',fontSize:32,fontWeight:800,marginBottom:32}}>Admin Profile</h1>
         <div className="card" style={{padding:32,marginBottom:20}}>
           <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:28,paddingBottom:28,borderBottom:'1px solid var(--border)'}}>
             <div style={{width:64,height:64,background:'var(--primary)',color:'white',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,fontWeight:700,fontFamily:'var(--font-display)',flexShrink:0}}>{user.avatar}</div>
@@ -40,7 +40,7 @@ export default function Profile() {
             </div>
           </div>
           <form onSubmit={handleSave}>
-            <h3 style={{fontFamily:'var(--font-display)',fontSize:16,fontWeight:700,marginBottom:16}}>Account Details</h3>
+            <h3 style={{fontFamily:'var(--font-display)',fontSize:16,fontWeight:700,marginBottom:16}}>Admin Details</h3>
             <div className="form-group"><label className="form-label">Display Name</label><input className="form-input" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} /></div>
             <div className="form-group"><label className="form-label">Email</label><input className="form-input" value={user.email} disabled style={{opacity:0.6}} /></div>
             <h3 style={{fontFamily:'var(--font-display)',fontSize:16,fontWeight:700,margin:'24px 0 16px'}}>Change Password</h3>

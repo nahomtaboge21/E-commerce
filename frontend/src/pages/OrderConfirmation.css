@@ -1,6 +1,6 @@
 .oc-page { padding: 60px 0 100px; background: var(--bg); }
 
-.oc-container { max-width: 600px; }
+.oc-container { max-width: 700px; }
 
 /* ── Header ── */
 .oc-header {
@@ -28,6 +28,7 @@
   font-size: 15px;
   color: var(--text-muted);
   margin-bottom: 14px;
+  line-height: 1.7;
 }
 .oc-id {
   display: inline-block;
@@ -46,8 +47,9 @@
 .oc-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px 22px;
+  border-radius: 18px;
+  padding: 22px 24px;
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
 }
 .oc-card-label {
   font-size: 11px;
@@ -67,6 +69,8 @@
   padding: 5px 14px;
   border-radius: 999px;
 }
+.oc-status-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.oc-status-copy { font-size: 13px; color: var(--text-secondary); }
 
 /* ── Items ── */
 .oc-items { display: flex; flex-direction: column; }
@@ -113,6 +117,13 @@
 /* ── Address ── */
 .oc-addr { font-size: 14px; color: var(--text-primary); margin-bottom: 2px; }
 .oc-muted { color: var(--text-muted) !important; font-size: 13px !important; }
+.oc-delivery-card { background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%); }
+.oc-delivery-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.oc-delivery-title { font-family: var(--font-display); font-size: 20px; font-weight: 800; line-height: 1.2; }
+.oc-delivery-pill { padding: 8px 14px; border-radius: 999px; background: #e0f2fe; color: #0369a1; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.oc-delivery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.oc-delivery-block { padding: 16px; border-radius: 14px; background: rgba(255,255,255,0.76); border: 1px solid var(--border); }
+.oc-delivery-label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
 
 /* ── Actions ── */
 .oc-actions {
@@ -125,6 +136,8 @@
 
 @media (max-width: 480px) {
   .oc-title { font-size: 26px; }
+  .oc-delivery-head { flex-direction: column; }
+  .oc-delivery-grid { grid-template-columns: 1fr; }
   .oc-actions { flex-direction: column; }
   .oc-actions .btn { width: 100%; text-align: center; }
 }

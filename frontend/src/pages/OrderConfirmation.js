@@ -42,6 +42,14 @@ export function OrderConfirmation() {
   const meta = STATUS_META[order.status] || STATUS_META.processing;
   const subtotal = order.items.reduce((s, i) => s + i.price * i.quantity, 0);
   const shipping = order.total - subtotal > 1 ? order.total - subtotal : 0;
+  const deliveryWindow = order.status === 'delivered'
+    ? 'Delivered successfully'
+    : order.status === 'shipped'
+      ? 'Arriving in 1-2 business days'
+      : order.status === 'confirmed'
+        ? 'Packed and dispatching in 24 hours'
+        : 'Estimated arrival in 2-4 business days';
+  const destination = [order.shippingAddress?.street, `${order.shippingAddress?.city || ''}, ${order.shippingAddress?.state || ''} ${order.shippingAddress?.zip || ''}`.trim(), order.shippingAddress?.country].filter(Boolean);
 
   return (
     <div className="oc-page page">
@@ -64,12 +72,15 @@ export function OrderConfirmation() {
           {/* ── Status ── */}
           <div className="oc-card">
             <p className="oc-card-label">Status</p>
-            <span
-              className="oc-status-badge"
-              style={{ color: meta.color, background: meta.bg, border: `1px solid ${meta.border}` }}
-            >
-              {meta.label}
-            </span>
+            <div className="oc-status-row">
+              <span
+                className="oc-status-badge"
+                style={{ color: meta.color, background: meta.bg, border: `1px solid ${meta.border}` }}
+              >
+                {meta.label}
+              </span>
+              <p className="oc-status-copy">{deliveryWindow}</p>
+            </div>
           </div>
 
           {/* ── Items ── */}
@@ -108,12 +119,25 @@ export function OrderConfirmation() {
 
           {/* ── Shipping address ── */}
           {order.shippingAddress && (
-            <div className="oc-card">
-              <p className="oc-card-label">Shipping Address</p>
-              <p className="oc-addr">{order.shippingAddress.street}</p>
-              <p className="oc-addr oc-muted">
-                {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zip}
-              </p>
+            <div className="oc-card oc-delivery-card">
+              <div className="oc-delivery-head">
+                <div>
+                  <p className="oc-card-label">Delivery Details</p>
+                  <h3 className="oc-delivery-title">{deliveryWindow}</h3>
+                </div>
+                <div className="oc-delivery-pill">{shipping === 0 ? 'Free Shipping' : `$${shipping.toFixed(2)} shipping`}</div>
+              </div>
+              <div className="oc-delivery-grid">
+                <div className="oc-delivery-block">
+                  <span className="oc-delivery-label">Recipient</span>
+                  <p className="oc-addr">{order.customerName || order.userName || 'Guest Customer'}</p>
+                  <p className="oc-addr oc-muted">{order.customerEmail || 'Email unavailable'}</p>
+                </div>
+                <div className="oc-delivery-block">
+                  <span className="oc-delivery-label">Destination</span>
+                  {destination.map(line => <p key={line} className="oc-addr">{line}</p>)}
+                </div>
+              </div>
             </div>
           )}
 

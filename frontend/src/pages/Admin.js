@@ -48,8 +48,8 @@ export default function Admin() {
   const [msg, setMsg] = useState('');
 
   useEffect(() => {
-    if (!user) { navigate('/login'); return; }
-    if (!isAdmin) { navigate('/'); return; }
+    if (!user) { navigate('/login?redirect=/admin'); return; }
+    if (!isAdmin) { navigate('/login?redirect=/admin'); return; }
     loadAll();
   }, [user, isAdmin, navigate]);
 
