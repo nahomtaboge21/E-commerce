@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const connectDB = require('../../backend/lib/mongodb');
+const ensureDemoProducts = require('../../backend/lib/ensureDemoProducts');
 const Product = require('../../backend/models/Product');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'shopwave_jwt_secret_2024';
@@ -28,6 +29,7 @@ const CATEGORIES = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Books'
 app.get(['/featured', '/api/products/featured'], async (req, res) => {
   try {
     await connectDB();
+    await ensureDemoProducts();
     const products = await Product.find({ featured: true }).limit(10).lean();
     res.json(products.map(p => ({ ...p, id: p._id })));
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -37,6 +39,7 @@ app.get(['/featured', '/api/products/featured'], async (req, res) => {
 app.get(['/', '/api/products'], async (req, res) => {
   try {
     await connectDB();
+    await ensureDemoProducts();
     const { search, category, minPrice, maxPrice, sortBy, page = 1, limit = 12, featured } = req.query;
     const query = {};
     if (search) query.$or = [
@@ -72,6 +75,7 @@ app.get(['/', '/api/products'], async (req, res) => {
 app.get(['/:id', '/api/products/:id'], async (req, res) => {
   try {
     await connectDB();
+    await ensureDemoProducts();
     const product = await Product.findById(req.params.id).lean();
     if (!product) return res.status(404).json({ error: 'Product not found' });
     const related = await Product.find({ category: product.category, _id: { $ne: product._id } }).limit(4).lean();
