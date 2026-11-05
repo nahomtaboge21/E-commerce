@@ -76,7 +76,7 @@
 
 .filter-toggle {
   position: relative;
-  display: none;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
 }
@@ -96,9 +96,20 @@
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 32px;
+  align-items: start;
+}
+
+.shop-body.container {
   padding-top: 36px;
   padding-bottom: 60px;
-  align-items: start;
+}
+
+.shop-body.filters-closed {
+  grid-template-columns: 1fr;
+}
+
+.shop-body.filters-closed .shop-filters {
+  display: none;
 }
 
 /* ── Filters ── */
@@ -318,15 +329,12 @@
   .shop-body {
     grid-template-columns: 1fr;
   }
-  .filter-toggle {
-    display: inline-flex;
-  }
   .shop-filters {
     display: none;
     position: static;
   }
-  .shop-filters.open {
+  .shop-body.filters-open .shop-filters {
     display: block;
-    margin-bottom: 24px;
+    margin-bottom: 0;
   }
 }

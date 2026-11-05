@@ -21,7 +21,7 @@ export default function Shop() {
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(() => typeof window !== 'undefined' && window.innerWidth > 960);
 
   const category = searchParams.get('category') || '';
   const search = searchParams.get('search') || '';
@@ -107,12 +107,14 @@ export default function Shop() {
             <button
               className="btn btn-outline btn-sm filter-toggle"
               onClick={() => setFiltersOpen((v) => !v)}
-              aria-label="絞り込み"
+              aria-label={filtersOpen ? '絞り込みを閉じる' : '絞り込み'}
+              aria-expanded={filtersOpen}
+              aria-controls="shop-filters"
             >
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
               </svg>
-              絞り込み {hasFilters && <span className="filter-dot" />}
+              {filtersOpen ? '絞り込みを閉じる' : '絞り込み'} {hasFilters && <span className="filter-dot" />}
             </button>
             <select
               className="form-input sort-select"
@@ -130,9 +132,9 @@ export default function Shop() {
         </div>
       </div>
 
-      <div className="container shop-body">
+      <div className={`container shop-body ${filtersOpen ? 'filters-open' : 'filters-closed'}`}>
         {/* Filters sidebar */}
-        <aside className={`shop-filters ${filtersOpen ? 'open' : ''}`}>
+        <aside id="shop-filters" className={`shop-filters ${filtersOpen ? 'open' : ''}`}>
           <div className="filters-header">
             <h3>絞り込み条件</h3>
             {hasFilters && (
