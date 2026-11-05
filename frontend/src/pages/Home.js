@@ -46,10 +46,42 @@ export default function Home() {
 
       <section className="kioluna-perks-section" aria-label="Lunivaのお約束">
         <div className="kioluna-home-wrap kioluna-perks-grid">
-          <div className="kioluna-perk-card"><span className="kioluna-perk-icon">🚚</span><span>日本全国<br />送料無料</span></div>
-          <div className="kioluna-perk-card"><span className="kioluna-perk-icon">🛡️</span><span>60日間<br />返金保証</span></div>
-          <div className="kioluna-perk-card"><span className="kioluna-perk-icon">🔒</span><span>100%安全な<br />お支払い</span></div>
-          <div className="kioluna-perk-card"><span className="kioluna-perk-icon">⭐</span><span>100,000人以上の<br />お客様</span></div>
+          <div className="kioluna-perk-card">
+            <span className="kioluna-perk-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 6h11v11H3zM14 10h4l3 3v4h-7z" />
+                <circle cx="7.5" cy="18" r="2" />
+                <circle cx="18" cy="18" r="2" />
+              </svg>
+            </span>
+            <span>日本全国<br />送料無料</span>
+          </div>
+          <div className="kioluna-perk-card">
+            <span className="kioluna-perk-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+            </span>
+            <span>60日間<br />返金保証</span>
+          </div>
+          <div className="kioluna-perk-card">
+            <span className="kioluna-perk-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="10" width="18" height="11" rx="2" />
+                <path d="M7 10V7a5 5 0 0 1 10 0v3M12 14v3" />
+              </svg>
+            </span>
+            <span>100%安全な<br />お支払い</span>
+          </div>
+          <div className="kioluna-perk-card">
+            <span className="kioluna-perk-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9z" />
+              </svg>
+            </span>
+            <span>100,000人以上の<br />お客様</span>
+          </div>
         </div>
       </section>
 
