@@ -10,6 +10,7 @@ export default function Navbar() {
   const { count, setIsOpen } = useCart();
 
   const [search, setSearch] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [isPhone, setIsPhone] = useState(() => window.innerWidth <= 840);
@@ -21,6 +22,7 @@ export default function Navbar() {
   useEffect(() => {
     setMenuOpen(false);
     setUserMenuOpen(false);
+    setSearchOpen(false);
   }, [location]);
 
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function Navbar() {
     if (!q) return;
     navigate(`/shop?search=${encodeURIComponent(q)}`);
     setSearch('');
+    setSearchOpen(false);
   };
 
   return (
@@ -55,13 +58,11 @@ export default function Navbar() {
       {/* Top Announcement Bar */}
       <div className="nav-topbar">
         <div className="container topbar-inner">
-          <div className="topbar-marquee-wrap" aria-label="Kioluna announcements">
+          <div className="topbar-marquee-wrap" aria-label="Kiolunaのお知らせ">
             <div className="topbar-marquee">
               <span className="topbar-marquee-item">100,000人以上のお客様にご愛用いただいています</span>
               <span className="topbar-dot" aria-hidden="true">|</span>
               <span className="topbar-marquee-item">送料無料 | 60日間返金保証</span>
-              <span className="topbar-dot" aria-hidden="true">|</span>
-              <span className="topbar-marquee-item">100,000人以上のお客様にご愛用いただいています</span>
             </div>
           </div>
         </div>
@@ -93,18 +94,23 @@ export default function Navbar() {
           </div>
 
           <div className="nav-actions">
-            <form className="nav-search" onSubmit={handleSearch} role="search" aria-label="商品を検索">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" />
-                <path d="m21 21-4.35-4.35" />
-              </svg>
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="商品を検索..."
-                aria-label="検索キーワード"
-              />
-            </form>
+            {searchOpen ? (
+              <form className="nav-search open" onSubmit={handleSearch} role="search" aria-label="商品を検索">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input autoFocus value={search} onChange={(e) => setSearch(e.target.value)} placeholder="商品を検索..." aria-label="検索キーワード" />
+                <button type="button" className="search-close" onClick={() => { setSearchOpen(false); setSearch(''); }} aria-label="検索を閉じる">×</button>
+              </form>
+            ) : (
+              <button type="button" className="btn btn-icon btn-ghost nav-search-toggle" onClick={() => setSearchOpen(true)} aria-label="商品を検索">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </button>
+            )}
 
             <button
               className="btn btn-icon btn-ghost cart-btn"

@@ -38,7 +38,7 @@ export function downloadReceipt(order) {
   const tax = Math.max(order.total - subtotal - shipping, 0);
   const customer = order.customerName || order.userName || 'Guest';
 
-  doc.setFillColor(27, 67, 50);
+  doc.setFillColor(31, 111, 92);
   doc.roundedRect(12, 12, 186, 34, 8, 8, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');

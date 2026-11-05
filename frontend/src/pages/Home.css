@@ -1,13 +1,13 @@
 .kioluna-home {
-  --home-brand: #1b4332;
-  --home-brand-deep: #123023;
-  --home-brand-tint: #edf4ef;
-  --home-ink: #142419;
-  --home-muted: #53675a;
-  --home-cream: #fbfcfb;
-  --home-line: #e2e8e3;
+  --home-brand: #1f6f5c;
+  --home-brand-deep: #164f42;
+  --home-brand-tint: #e8f1ed;
+  --home-ink: #1a1a1a;
+  --home-muted: #5b635f;
+  --home-cream: #fbfaf7;
+  --home-line: #e4e1d9;
   color: var(--home-ink);
-  font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+  font-family: 'Nunito Sans', 'Noto Sans JP', sans-serif;
   line-height: 1.55;
 }
 
@@ -18,64 +18,54 @@
 }
 
 .kioluna-home-wrap {
-  width: min(100% - 40px, 1140px);
+  width: min(100% - 40px, 1040px);
   margin-inline: auto;
 }
 
-/* ── Hero Section ──────────────────────────────────────────────────────────── */
 .kioluna-hero-section {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: stretch;
-  min-height: 540px;
-  background: var(--home-cream);
-  border-bottom: 1px solid var(--home-line);
+  min-height: 520px;
 }
 
 .kioluna-hero-copy {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 68px 60px;
+  padding: 60px 56px;
   background: var(--home-cream);
 }
 
 .kioluna-hero-eyebrow {
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   color: var(--home-brand);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .kioluna-hero-copy h1 {
-  margin: 0 0 16px;
-  color: var(--home-brand);
-  font-size: clamp(28px, 3.6vw, 42px);
+  margin: 0 0 14px;
+  color: var(--home-ink);
+  font-size: 33px;
   font-weight: 900;
-  line-height: 1.25;
+  line-height: 1.14;
   letter-spacing: -0.02em;
 }
 
 .kioluna-hero-copy p {
-  max-width: 480px;
-  margin: 0 0 28px;
+  max-width: 440px;
+  margin: 0;
   color: var(--home-muted);
   font-size: 15px;
-  line-height: 1.75;
   font-weight: 500;
-}
-
-.kioluna-hero-buttons {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
 }
 
 .kioluna-hero-image {
   position: relative;
-  min-height: 380px;
+  min-height: 340px;
   background: var(--home-brand-tint);
 }
 
@@ -88,89 +78,48 @@
   object-fit: cover;
 }
 
-/* ── Perks Section ─────────────────────────────────────────────────────────── */
 .kioluna-perks-section {
-  background: #ffffff;
+  background: var(--home-cream);
   border-bottom: 1px solid var(--home-line);
 }
 
 .kioluna-perks-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding-block: 28px;
+  gap: 18px;
+  padding-block: 26px;
 }
 
 .kioluna-perk-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   text-align: left;
   font-size: 13.5px;
   font-weight: 700;
-  line-height: 1.35;
-  color: var(--home-brand);
+  line-height: 1.25;
 }
 
 .kioluna-perk-icon {
   display: grid;
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   flex: none;
   place-items: center;
   border-radius: 50%;
   background: var(--home-brand-tint);
-  font-size: 18px;
+  font-size: 16px;
 }
 
-/* ── Featured Bestsellers Section ─────────────────────────────────────────── */
-.kioluna-featured-section {
-  padding: 68px 0 74px;
-  background: #ffffff;
-  border-bottom: 1px solid var(--home-line);
-}
-
-.kioluna-featured-heading {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 38px;
-}
-
-.kioluna-featured-heading h2 {
-  font-size: clamp(24px, 3.2vw, 32px);
-  font-weight: 900;
-  color: var(--home-brand);
-  letter-spacing: -0.01em;
-  margin: 6px 0 8px;
-}
-
-.kioluna-featured-heading p {
-  color: var(--home-muted);
-  font-size: 14.5px;
-}
-
-.kioluna-featured-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
-}
-
-.kioluna-featured-cta {
-  text-align: center;
-  margin-top: 44px;
-}
-
-/* ── Why Section ───────────────────────────────────────────────────────────── */
 .kioluna-why-section {
-  padding: 72px 0;
-  background: var(--home-cream);
+  padding: 64px 0;
+  background: #ffffff;
   text-align: center;
-  border-bottom: 1px solid var(--home-line);
 }
 
 .kioluna-why-eyebrow {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: var(--home-brand);
   font-size: 11.5px;
   font-weight: 800;
@@ -180,48 +129,39 @@
 
 .kioluna-why-section h2 {
   max-width: 620px;
-  margin: 0 auto 12px;
-  font-size: clamp(24px, 3.2vw, 30px);
-  font-weight: 900;
-  color: var(--home-brand);
+  margin: 0 auto 14px;
+  font-size: 25px;
+  font-weight: 800;
   letter-spacing: -0.01em;
 }
 
 .kioluna-why-lead {
-  max-width: 620px;
-  margin: 0 auto 38px;
+  max-width: 600px;
+  margin: 0 auto 36px;
   color: var(--home-muted);
   font-size: 14.5px;
-  line-height: 1.7;
   font-weight: 500;
 }
 
 .kioluna-why-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 18px;
   text-align: left;
 }
 
 .kioluna-why-card {
-  padding: 28px 24px;
+  padding: 24px;
   border: 1px solid var(--home-line);
   border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(27, 67, 50, 0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.kioluna-why-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(27, 67, 50, 0.08);
+  background: var(--home-cream);
 }
 
 .kioluna-why-icon {
   display: grid;
-  width: 44px;
-  height: 44px;
-  margin-bottom: 16px;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 14px;
   place-items: center;
   border-radius: 12px;
   background: var(--home-brand-tint);
@@ -229,53 +169,50 @@
 }
 
 .kioluna-why-card h3 {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   font-size: 16px;
   font-weight: 800;
-  color: var(--home-brand);
 }
 
 .kioluna-why-card p {
   margin: 0;
   color: var(--home-muted);
   font-size: 13.5px;
-  line-height: 1.65;
   font-weight: 500;
 }
 
-/* ── Reviews Section ───────────────────────────────────────────────────────── */
 .kioluna-reviews-section {
-  padding: 68px 0 74px;
+  padding: 58px 0 64px;
   color: #1a1a1a;
-  background: linear-gradient(180deg, #1b4332 0%, #143525 100%);
+  background: linear-gradient(180deg, #cfe0d6 0%, #9db9aa 100%);
 }
 
 .kioluna-reviews-heading {
   max-width: 620px;
-  margin: 0 auto 36px;
+  margin: 0 auto 30px;
   padding: 0 20px;
   text-align: center;
 }
 
 .kioluna-reviews-heading h2 {
   margin: 0 0 8px;
-  color: #ffffff;
-  font-size: clamp(26px, 3.4vw, 34px);
+  color: #123b30;
+  font-size: 30px;
   font-weight: 900;
   letter-spacing: -0.01em;
 }
 
 .kioluna-reviews-heading p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 14.5px;
+  color: #5b635f;
+  font-size: 14px;
 }
 
 .kioluna-reviews-row {
   display: flex;
-  gap: 20px;
+  gap: 18px;
   overflow-x: auto;
-  padding: 10px 24px 20px;
+  padding: 6px 20px 12px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -287,30 +224,30 @@
 
 .review-card {
   display: flex;
-  flex: 0 0 310px;
+  flex: 0 0 290px;
   flex-direction: column;
   align-items: center;
   padding: 28px 24px;
-  border-radius: 16px;
+  border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
   text-align: center;
   scroll-snap-align: center;
 }
 
 .review-stars {
   display: flex;
-  gap: 3px;
-  margin-bottom: 14px;
+  gap: 4px;
+  margin-bottom: 16px;
 }
 
 .review-stars span {
   display: grid;
-  width: 22px;
-  height: 22px;
+  width: 21px;
+  height: 21px;
   place-items: center;
-  border-radius: 4px;
-  background: #c5a059;
+  border-radius: 5px;
+  background: #c99a57;
   color: #ffffff;
   font-size: 13px;
   line-height: 1;
@@ -319,100 +256,44 @@
 .review-title {
   margin: 0 0 10px;
   color: #1a1a1a;
-  font-size: 15.5px;
+  font-size: 16px;
   font-weight: 800;
-  line-height: 1.4;
 }
 
 .review-comment {
   flex: 1;
   margin: 0 0 18px;
-  color: #555e58;
-  font-size: 13px;
-  line-height: 1.7;
+  color: #5b635f;
+  font-size: 13.5px;
+  line-height: 1.65;
 }
 
 .review-author {
-  color: var(--home-brand);
-  font-size: 12.5px;
-  font-weight: 800;
-  border-top: 1px solid var(--home-line);
-  padding-top: 10px;
-  width: 100%;
-}
-
-/* ── Anti-Counterfeit Notice ───────────────────────────────────────────────── */
-.kioluna-notice-section {
-  padding: 44px 0 60px;
-  background: #ffffff;
-}
-
-.kioluna-notice-card {
-  border: 2px solid var(--home-brand);
-  border-radius: 14px;
-  padding: 26px 30px;
-  background: #fbfdfb;
-  text-align: center;
-}
-
-.kioluna-notice-badge {
-  display: inline-block;
-  background: var(--home-brand);
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 3px 10px;
-  border-radius: 999px;
-  letter-spacing: 0.05em;
-  margin-bottom: 10px;
-}
-
-.kioluna-notice-card h3 {
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--home-brand);
-  margin-bottom: 8px;
-}
-
-.kioluna-notice-card p {
+  color: var(--home-brand-deep);
   font-size: 13px;
-  color: var(--home-muted);
-  line-height: 1.7;
-  max-width: 820px;
-  margin: 0 auto;
+  font-weight: 800;
 }
 
-/* ── Responsive ────────────────────────────────────────────────────────────── */
-@media (max-width: 1080px) {
-  .kioluna-featured-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 860px) {
+@media (max-width: 820px) {
   .kioluna-hero-section {
     grid-template-columns: 1fr;
   }
 
   .kioluna-hero-image {
     order: -1;
-    min-height: 300px;
+    min-height: 280px;
   }
 
   .kioluna-hero-copy {
-    padding: 44px 28px;
+    padding: 44px 26px;
   }
 
   .kioluna-hero-copy h1 {
-    font-size: 28px;
-  }
-
-  .kioluna-featured-grid {
-    grid-template-columns: repeat(2, 1fr);
+    font-size: 26px;
   }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 720px) {
   .kioluna-perks-grid {
     grid-template-columns: 1fr 1fr;
     gap: 14px;
@@ -435,14 +316,6 @@
   }
 
   .review-card {
-    flex-basis: 82%;
-  }
-
-  .kioluna-featured-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .kioluna-hero-buttons .btn {
-    width: 100%;
+    flex-basis: 80%;
   }
 }

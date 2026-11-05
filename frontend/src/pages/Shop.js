@@ -6,12 +6,12 @@ import fallbackProducts from '../data/products.json';
 import './Shop.css';
 
 const SORT_OPTIONS = [
-  { value: 'default', label: 'おすすめ順 (Featured)' },
-  { value: 'newest', label: '新着順 (Newest)' },
-  { value: 'price_asc', label: '価格が安い順 (Price: Low to High)' },
-  { value: 'price_desc', label: '価格が高い順 (Price: High to Low)' },
-  { value: 'rating', label: '評価が高い順 (Best Rated)' },
-  { value: 'reviews', label: 'レビューが多い順 (Most Reviews)' },
+  { value: 'default', label: 'おすすめ順' },
+  { value: 'newest', label: '新着順' },
+  { value: 'price_asc', label: '価格の安い順' },
+  { value: 'price_desc', label: '価格の高い順' },
+  { value: 'rating', label: '評価の高い順' },
+  { value: 'reviews', label: 'レビューの多い順' },
 ];
 
 export default function Shop() {
@@ -95,7 +95,7 @@ export default function Shop() {
       <div className="shop-header-bar">
         <div className="container shop-header-inner">
           <div>
-            <span className="shop-eyebrow">KIOLUNA OFFICIAL STORE</span>
+            <span className="shop-eyebrow">Kioluna 公式オンラインストア</span>
             <h1 className="shop-title">
               {search ? `「${search}」の検索結果` : category || '全商品コレクション'}
             </h1>

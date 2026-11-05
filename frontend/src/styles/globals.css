@@ -1,32 +1,32 @@
 :root {
-  --primary: #1b4332;
-  --primary-hover: #133226;
-  --primary-light: #2d5a44;
-  --primary-tint: #eaf2ec;
-  --primary-rgb: 27, 67, 50;
-  --accent: #2d6a4f;
-  --accent-light: #40916c;
+  --primary: #1f6f5c;
+  --primary-hover: #164f42;
+  --primary-light: #2e806c;
+  --primary-tint: #e8f1ed;
+  --primary-rgb: 31, 111, 92;
+  --accent: #1f6f5c;
+  --accent-light: #2e806c;
   --accent-gold: #c5a059;
-  --success: #2d6a4f;
+  --success: #1f6f5c;
   --warning: #e09f3e;
   --danger: #d90429;
-  --bg: #f8faf8;
+  --bg: #fbfaf7;
   --surface: #ffffff;
-  --surface-2: #f0f5f1;
-  --surface-3: #e4eee6;
-  --border: #e2eae3;
-  --border-strong: #c8d7ca;
-  --text-primary: #142419;
-  --text-secondary: #475a4d;
-  --text-muted: #7b8e80;
+  --surface-2: #fbfaf7;
+  --surface-3: #e8f1ed;
+  --border: #e4e1d9;
+  --border-strong: #c8d8d0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #3f4743;
+  --text-muted: #5b635f;
   --radius: 6px;
   --radius-lg: 12px;
   --radius-xl: 18px;
-  --shadow-sm: 0 1px 3px rgba(27,67,50,0.05), 0 1px 2px rgba(27,67,50,0.03);
-  --shadow-md: 0 4px 14px rgba(27,67,50,0.07), 0 2px 6px rgba(27,67,50,0.04);
-  --shadow-lg: 0 14px 34px rgba(27,67,50,0.11), 0 4px 14px rgba(27,67,50,0.06);
-  --font-display: 'Plus Jakarta Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Plus Jakarta Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(31,111,92,0.05), 0 1px 2px rgba(31,111,92,0.03);
+  --shadow-md: 0 4px 14px rgba(31,111,92,0.07), 0 2px 6px rgba(31,111,92,0.04);
+  --shadow-lg: 0 14px 34px rgba(31,111,92,0.11), 0 4px 14px rgba(31,111,92,0.06);
+  --font-display: 'Nunito Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Nunito Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
   --nav-h: 74px;
 }
 
@@ -77,7 +77,7 @@ img { max-width: 100%; display: block; }
   background: var(--primary-hover);
   border-color: var(--primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(27,67,50,0.24);
+  box-shadow: 0 4px 14px rgba(31,111,92,0.24);
 }
 .btn-accent {
   background: var(--accent);
@@ -86,7 +86,7 @@ img { max-width: 100%; display: block; }
 .btn-accent:hover {
   background: var(--primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(27,67,50,0.22);
+  box-shadow: 0 4px 14px rgba(31,111,92,0.22);
 }
 .btn-outline {
   background: transparent;
@@ -158,7 +158,7 @@ img { max-width: 100%; display: block; }
 }
 .form-input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.12);
+  box-shadow: 0 0 0 3px rgba(31, 111, 92, 0.12);
 }
 .form-input::placeholder { color: var(--text-muted); }
 .form-error { font-size: 12px; color: var(--danger); margin-top: 4px; }
@@ -174,7 +174,7 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   letter-spacing: 0.2px;
 }
-.badge-success { background: #e8f5ec; color: #1b4332; }
+.badge-success { background: #e8f1ed; color: #1f6f5c; }
 .badge-warning { background: #fef5e7; color: #9a6316; }
 .badge-danger { background: #fee8e8; color: #a31c1c; }
 .badge-info { background: #e9f2fb; color: #1d4ed8; }
