@@ -1,7 +1,7 @@
 .shop-header-bar {
-  background: linear-gradient(180deg, #edf4ef 0%, #f7faf8 100%);
-  border-bottom: 1px solid var(--border);
-  padding: 36px 0;
+  background: linear-gradient(115deg, #0f2b1d 0%, #143525 56%, #1d4a31 100%);
+  border-bottom: 1px solid #2d6248;
+  padding: 42px 0;
 }
 
 .shop.page {
@@ -21,7 +21,7 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.15em;
-  color: var(--primary);
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 6px;
 }
 
@@ -29,13 +29,13 @@
   font-family: var(--font-display);
   font-size: clamp(24px, 3.2vw, 32px);
   font-weight: 800;
-  color: var(--primary);
+  color: #ffffff;
   letter-spacing: -0.01em;
 }
 
 .shop-count {
   font-size: 13.5px;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.82);
   margin-top: 4px;
 }
 
@@ -43,6 +43,17 @@
   display: flex;
   gap: 12px;
   align-items: center;
+}
+
+.shop-header-bar .btn-outline {
+  border-color: rgba(255, 255, 255, 0.62);
+  color: #ffffff;
+}
+
+.shop-header-bar .btn-outline:hover {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
 }
 
 .sort-select {
@@ -73,7 +84,7 @@
 .filter-dot {
   width: 7px;
   height: 7px;
-  background: var(--primary);
+  background: #b8d1a8;
   border-radius: 50%;
   position: absolute;
   top: -2px;
@@ -233,13 +244,13 @@
 .shop-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 20px;
+  gap: 28px;
 }
 
 .shop-loading {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 20px;
+  gap: 28px;
 }
 
 .product-skeleton {

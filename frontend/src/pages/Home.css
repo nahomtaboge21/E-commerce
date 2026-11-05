@@ -79,8 +79,8 @@
 }
 
 .kioluna-perks-section {
-  background: var(--home-cream);
-  border-bottom: 1px solid var(--home-line);
+  background: linear-gradient(110deg, var(--home-brand-deep), var(--home-brand));
+  color: #ffffff;
 }
 
 .kioluna-perks-grid {
@@ -108,7 +108,8 @@
   flex: none;
   place-items: center;
   border-radius: 50%;
-  background: var(--home-brand-tint);
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
   font-size: 16px;
 }
 
@@ -146,15 +147,17 @@
 .kioluna-why-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 24px;
   text-align: left;
 }
 
 .kioluna-why-card {
-  padding: 24px;
-  border: 1px solid var(--home-line);
+  padding: 28px;
+  border: 1px solid #d7e3da;
+  border-top: 4px solid var(--home-brand);
   border-radius: 16px;
-  background: var(--home-cream);
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(20, 53, 37, 0.07);
 }
 
 .kioluna-why-icon {
@@ -164,7 +167,8 @@
   margin-bottom: 14px;
   place-items: center;
   border-radius: 12px;
-  background: var(--home-brand-tint);
+  background: var(--home-brand);
+  color: #ffffff;
   font-size: 20px;
 }
 
@@ -183,8 +187,8 @@
 
 .kioluna-reviews-section {
   padding: 58px 0 64px;
-  color: #1a1a1a;
-  background: linear-gradient(180deg, #cfe0d6 0%, #9db9aa 100%);
+  color: #ffffff;
+  background: linear-gradient(145deg, #143525 0%, #1d4a31 55%, #0f2b1d 100%);
 }
 
 .kioluna-reviews-heading {
@@ -196,7 +200,7 @@
 
 .kioluna-reviews-heading h2 {
   margin: 0 0 8px;
-  color: #123b30;
+  color: #ffffff;
   font-size: 30px;
   font-weight: 900;
   letter-spacing: -0.01em;
@@ -204,13 +208,13 @@
 
 .kioluna-reviews-heading p {
   margin: 0;
-  color: #5b635f;
+  color: rgba(255, 255, 255, 0.78);
   font-size: 14px;
 }
 
 .kioluna-reviews-row {
   display: flex;
-  gap: 18px;
+  gap: 24px;
   overflow-x: auto;
   padding: 6px 20px 12px;
   scroll-snap-type: x mandatory;
@@ -230,7 +234,8 @@
   padding: 28px 24px;
   border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
   text-align: center;
   scroll-snap-align: center;
 }
