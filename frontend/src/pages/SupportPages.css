@@ -1,0 +1,39 @@
+.support-page { color: var(--text-primary); }
+.support-heading { padding: 68px 20px 58px; text-align: center; background: #f3f7f3; }
+.support-heading > span, .support-help-inner > div > span { color: var(--primary); font-size: 11px; font-weight: 800; letter-spacing: .16em; }
+.support-heading h1 { margin: 8px 0; font-size: clamp(30px, 4vw, 42px); font-weight: 650; }
+.support-heading > p { color: var(--text-secondary); }
+.support-content { max-width: 920px; padding-top: 46px; padding-bottom: 58px; }
+.support-rows { display: grid; gap: 14px; }
+.support-rows > section, .support-faq details { padding: 22px 24px; background: #fff; border: 1px solid var(--border); border-radius: 10px; }
+.support-rows h2 { margin-bottom: 7px; font-size: 17px; }
+.support-rows p, .tracking-note { color: var(--text-secondary); line-height: 1.8; }
+.support-faq details { padding: 0; }
+.support-faq summary { padding: 20px 24px; cursor: pointer; font-size: 15px; font-weight: 700; list-style-position: inside; }
+.support-faq details p { padding: 0 24px 22px 44px; }
+.support-help { background: #f3f7f3; padding: 36px 0; }
+.support-help-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.support-help-inner h2 { font-size: 22px; margin: 5px 0; }
+.support-help-inner p { color: var(--text-secondary); font-size: 14px; }
+.tracking-form { padding: 26px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.tracking-form label, .contact-form label { display: grid; gap: 8px; color: var(--text-secondary); font-size: 13px; font-weight: 700; }
+.tracking-form > div { display: flex; gap: 10px; margin-top: 10px; }
+.tracking-form input, .contact-form input, .contact-form textarea { min-width: 0; width: 100%; padding: 12px 14px; border: 1px solid var(--border-strong); border-radius: 6px; outline-color: var(--primary); background: #fff; color: var(--text-primary); }
+.tracking-result { margin-top: 18px; padding: 20px; display: grid; gap: 7px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+.tracking-result span, .tracking-note { color: var(--text-secondary); }
+.tracking-result strong { color: var(--primary); }
+.tracking-result a, .tracking-note a, .contact-details a { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+.tracking-message { margin-top: 14px; color: var(--text-secondary); }
+.tracking-note { margin-top: 24px; }
+.contact-details { display: grid; gap: 8px; padding: 20px 0 28px; color: var(--text-secondary); }
+.contact-form { display: grid; gap: 16px; padding: 26px; background: #fff; border: 1px solid var(--border); border-radius: 10px; }
+.contact-form textarea { resize: vertical; }
+.contact-form .btn { justify-self: start; }
+.contact-form [role="status"] { color: var(--text-secondary); font-size: 13px; }
+@media (max-width: 600px) {
+  .support-heading { padding: 48px 18px 40px; }
+  .support-content { padding-top: 28px; padding-bottom: 38px; }
+  .support-help-inner { align-items: flex-start; flex-direction: column; }
+  .tracking-form, .contact-form { padding: 18px; }
+  .tracking-form > div { flex-direction: column; }
+}

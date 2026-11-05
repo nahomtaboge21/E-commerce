@@ -1,10 +1,11 @@
 import { jsPDF } from 'jspdf';
 
-const STORAGE_KEY = 'shopvine_recent_orders';
+const STORAGE_KEY = 'kioluna_recent_orders';
+const LEGACY_STORAGE_KEY = 'shopvine_recent_orders';
 
 export function getRecentOrders() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY) || '[]');
   } catch {
     return [];
   }
@@ -37,7 +38,7 @@ export function downloadReceipt(order) {
   const tax = Math.max(order.total - subtotal - shipping, 0);
   const customer = order.customerName || order.userName || 'Guest';
 
-  doc.setFillColor(15, 23, 42);
+  doc.setFillColor(27, 67, 50);
   doc.roundedRect(12, 12, 186, 34, 8, 8, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
@@ -46,7 +47,7 @@ export function downloadReceipt(order) {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.setTextColor(226, 232, 240);
-  doc.text('Premium order summary and delivery confirmation', 20, 35);
+  doc.text('Official order summary & 60-day guarantee', 20, 35);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(255, 255, 255);
   doc.text(order.id, 160, 27, { align: 'right' });
@@ -82,27 +83,27 @@ export function downloadReceipt(order) {
     doc.text(item.name, 24, y + 1);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(100, 116, 139);
-    doc.text(`Qty ${item.quantity} x $${item.price.toFixed(2)}`, 24, y + 6);
+    doc.text(`Qty ${item.quantity} x JPY ${Math.round(item.price).toLocaleString()}`, 24, y + 6);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(15, 23, 42);
-    doc.text(`$${(item.price * item.quantity).toFixed(2)}`, 184, y + 4, { align: 'right' });
+    doc.text(`JPY ${Math.round(item.price * item.quantity).toLocaleString()}`, 184, y + 4, { align: 'right' });
     y += 18;
   });
 
   y += 4;
   doc.line(120, y, 190, y);
   y += 8;
-  addLine(doc, 'Subtotal', `$${subtotal.toFixed(2)}`, y, { labelX: 130, valueX: 184, size: 10 });
+  addLine(doc, 'Subtotal', `JPY ${Math.round(subtotal).toLocaleString()}`, y, { labelX: 130, valueX: 184, size: 10 });
   y += 7;
-  addLine(doc, 'Shipping', shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`, y, { labelX: 130, valueX: 184, size: 10 });
+  addLine(doc, 'Shipping', 'Free', y, { labelX: 130, valueX: 184, size: 10 });
   y += 7;
-  addLine(doc, 'Tax', `$${tax.toFixed(2)}`, y, { labelX: 130, valueX: 184, size: 10 });
+  addLine(doc, 'Tax', 'JPY 0 (Incl.)', y, { labelX: 130, valueX: 184, size: 10 });
   y += 9;
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(14);
   doc.setTextColor(15, 23, 42);
   doc.text('Total', 130, y);
-  doc.text(`$${order.total.toFixed(2)}`, 184, y, { align: 'right' });
+  doc.text(`JPY ${Math.round(order.total).toLocaleString()}`, 184, y, { align: 'right' });
 
   y += 16;
   doc.setFillColor(240, 249, 255);

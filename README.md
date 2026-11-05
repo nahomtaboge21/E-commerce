@@ -1,6 +1,6 @@
-# ShopWave — Full Stack Ecommerce
+# Kioluna（キオルナ）— Official E-Commerce Storefront
 
-A complete, production-ready ecommerce web app built with **React** (frontend) and **Node.js/Express** (backend).
+A complete full-stack Japanese lifestyle and care storefront modeled after **[kioluna.com](https://kioluna.com/)**, featuring a primary dark green brand aesthetic (`#1b4332`), responsive React frontend, and Node.js/Express backend.
 
 ---
 

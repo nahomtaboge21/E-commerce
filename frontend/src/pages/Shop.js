@@ -2,15 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { productsAPI } from '../api';
 import ProductCard from '../components/common/ProductCard';
+import fallbackProducts from '../data/products.json';
 import './Shop.css';
 
 const SORT_OPTIONS = [
-  { value: 'default', label: 'Featured' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'price_asc', label: 'Price: Low to High' },
-  { value: 'price_desc', label: 'Price: High to Low' },
-  { value: 'rating', label: 'Best Rated' },
-  { value: 'reviews', label: 'Most Reviews' },
+  { value: 'default', label: 'おすすめ順 (Featured)' },
+  { value: 'newest', label: '新着順 (Newest)' },
+  { value: 'price_asc', label: '価格が安い順 (Price: Low to High)' },
+  { value: 'price_desc', label: '価格が高い順 (Price: High to Low)' },
+  { value: 'rating', label: '評価が高い順 (Best Rated)' },
+  { value: 'reviews', label: 'レビューが多い順 (Most Reviews)' },
 ];
 
 export default function Shop() {
@@ -38,14 +39,33 @@ export default function Shop() {
     try {
       const res = await productsAPI.getAll({ search, category, sortBy, page, minPrice, maxPrice, featured, limit: 12 });
       setProducts(res.data.products);
-      setCategories(['All', ...res.data.categories]);
+      setCategories(['全商品', ...res.data.categories]);
       setTotal(res.data.total);
       setPages(res.data.pages);
-    } catch (e) { console.error(e); }
-    finally { setLoading(false); }
+    } catch (e) {
+      let filtered = [...fallbackProducts];
+      if (search) {
+        const q = search.toLowerCase();
+        filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q));
+      }
+      if (category && category !== '全商品') {
+        filtered = filtered.filter(p => p.category === category);
+      }
+      if (minPrice) filtered = filtered.filter(p => p.price >= parseFloat(minPrice));
+      if (maxPrice) filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
+      if (featured) filtered = filtered.filter(p => p.featured);
+      setProducts(filtered);
+      setCategories(['全商品', ...new Set(fallbackProducts.map(p => p.category))]);
+      setTotal(filtered.length);
+      setPages(1);
+    } finally {
+      setLoading(false);
+    }
   }, [search, category, sortBy, page, minPrice, maxPrice, featured]);
 
-  useEffect(() => { fetchProducts(); }, [fetchProducts]);
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const setParam = (key, val, keepPage = false) => {
     const p = new URLSearchParams(searchParams);
@@ -63,7 +83,8 @@ export default function Shop() {
   };
 
   const clearFilters = () => {
-    setPriceFrom(''); setPriceTo('');
+    setPriceFrom('');
+    setPriceTo('');
     setSearchParams({});
   };
 
@@ -74,54 +95,115 @@ export default function Shop() {
       <div className="shop-header-bar">
         <div className="container shop-header-inner">
           <div>
-            <h1 className="shop-title">{search ? `Results for "${search}"` : category || 'All Products'}</h1>
-            <p className="shop-count">{total} products</p>
+            <span className="shop-eyebrow">KIOLUNA OFFICIAL STORE</span>
+            <h1 className="shop-title">
+              {search ? `「${search}」の検索結果` : category || '全商品コレクション'}
+            </h1>
+            <p className="shop-count">
+              全 {total} 件の商品 · 日本全国送料無料 · 60日間返金保証
+            </p>
           </div>
           <div className="shop-controls">
-            <button className="btn btn-outline btn-sm filter-toggle" onClick={() => setFiltersOpen(v => !v)}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-              Filters {hasFilters && <span className="filter-dot" />}
+            <button
+              className="btn btn-outline btn-sm filter-toggle"
+              onClick={() => setFiltersOpen((v) => !v)}
+              aria-label="絞り込み"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+              絞り込み {hasFilters && <span className="filter-dot" />}
             </button>
-            <select className="form-input sort-select" value={sortBy} onChange={e => setParam('sortBy', e.target.value)}>
-              {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+            <select
+              className="form-input sort-select"
+              value={sortBy}
+              onChange={(e) => setParam('sortBy', e.target.value)}
+              aria-label="並び替え"
+            >
+              {SORT_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
       </div>
 
-      <div className="container shop-body" style={{ marginTop: '40px' }}>
+      <div className="container shop-body">
         {/* Filters sidebar */}
         <aside className={`shop-filters ${filtersOpen ? 'open' : ''}`}>
           <div className="filters-header">
-            <h3>Filters</h3>
-            {hasFilters && <button className="btn btn-ghost btn-sm" onClick={clearFilters}>Clear all</button>}
+            <h3>絞り込み条件</h3>
+            {hasFilters && (
+              <button className="btn btn-ghost btn-sm clear-filters-btn" onClick={clearFilters}>
+                条件をクリア
+              </button>
+            )}
           </div>
 
           <div className="filter-section">
-            <h4>Category</h4>
-            {categories.map(cat => (
-              <label key={cat} className={`filter-option ${(category || 'All') === cat ? 'active' : ''}`}>
-                <input type="radio" name="category" checked={(category || 'All') === cat} onChange={() => setParam('category', cat === 'All' ? '' : cat)} />
-                {cat}
-              </label>
-            ))}
+            <h4>カテゴリー</h4>
+            {categories.map((cat) => {
+              const isActive = (!category && cat === '全商品') || category === cat;
+              return (
+                <label key={cat} className={`filter-option ${isActive ? 'active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="category"
+                    checked={isActive}
+                    onChange={() => setParam('category', cat === '全商品' ? '' : cat)}
+                  />
+                  <span>{cat}</span>
+                </label>
+              );
+            })}
           </div>
 
           <div className="filter-section">
-            <h4>Price Range</h4>
+            <h4>価格帯 (JPY)</h4>
             <div className="price-range">
-              <input className="form-input" type="number" placeholder="Min $" value={priceFrom} onChange={e => setPriceFrom(e.target.value)} min="0" />
-              <span>—</span>
-              <input className="form-input" type="number" placeholder="Max $" value={priceTo} onChange={e => setPriceTo(e.target.value)} min="0" />
+              <input
+                className="form-input"
+                type="number"
+                placeholder="¥ 最小"
+                value={priceFrom}
+                onChange={(e) => setPriceFrom(e.target.value)}
+                min="0"
+              />
+              <span>〜</span>
+              <input
+                className="form-input"
+                type="number"
+                placeholder="¥ 最大"
+                value={priceTo}
+                onChange={(e) => setPriceTo(e.target.value)}
+                min="0"
+              />
             </div>
-            <button className="btn btn-outline btn-sm" style={{width:'100%', marginTop:10}} onClick={applyPrice}>Apply</button>
+            <button className="btn btn-outline btn-sm apply-price-btn" onClick={applyPrice}>
+              価格を適用
+            </button>
           </div>
 
           <div className="filter-section">
+            <h4>特別条件</h4>
             <label className={`filter-option ${featured ? 'active' : ''}`}>
-              <input type="checkbox" checked={!!featured} onChange={e => setParam('featured', e.target.checked ? 'true' : '')} />
-              On Sale / Featured
+              <input
+                type="checkbox"
+                checked={!!featured}
+                onChange={(e) => setParam('featured', e.target.checked ? 'true' : '')}
+              />
+              <span>人気商品 / セール品</span>
             </label>
+          </div>
+
+          <div className="filter-guarantee-box">
+            <span className="guarantee-icon">🛡️</span>
+            <div>
+              <strong>全品60日間返金保証</strong>
+              <p>日本全国どこでも送料無料でお届けします。</p>
+            </div>
           </div>
         </aside>
 
@@ -129,28 +211,52 @@ export default function Shop() {
         <div className="shop-main">
           {loading ? (
             <div className="shop-loading">
-              {[...Array(8)].map((_, i) => <div key={i} className="product-skeleton" />)}
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="product-skeleton" />
+              ))}
             </div>
           ) : products.length === 0 ? (
             <div className="shop-empty">
-              <p>No products found</p>
-              <button className="btn btn-outline" onClick={clearFilters}>Clear Filters</button>
+              <p>該当する商品が見つかりませんでした。</p>
+              <button className="btn btn-outline" onClick={clearFilters}>
+                条件をクリアして全商品を見る
+              </button>
             </div>
           ) : (
             <div className="shop-grid">
-              {products.map(p => <ProductCard key={p.id} product={p} />)}
+              {products.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
           )}
 
           {pages > 1 && (
             <div className="pagination">
-              <button className="btn btn-outline btn-sm" onClick={() => setParam('page', String(page - 1), true)} disabled={page <= 1}>← Prev</button>
+              <button
+                className="btn btn-outline btn-sm"
+                onClick={() => setParam('page', String(page - 1), true)}
+                disabled={page <= 1}
+              >
+                ← 前へ
+              </button>
               <div className="page-nums">
                 {[...Array(pages)].map((_, i) => (
-                  <button key={i} className={`page-btn ${page === i+1 ? 'active' : ''}`} onClick={() => setParam('page', String(i+1), true)}>{i+1}</button>
+                  <button
+                    key={i}
+                    className={`page-btn ${page === i + 1 ? 'active' : ''}`}
+                    onClick={() => setParam('page', String(i + 1), true)}
+                  >
+                    {i + 1}
+                  </button>
                 ))}
               </div>
-              <button className="btn btn-outline btn-sm" onClick={() => setParam('page', String(page + 1), true)} disabled={page >= pages}>Next →</button>
+              <button
+                className="btn btn-outline btn-sm"
+                onClick={() => setParam('page', String(page + 1), true)}
+                disabled={page >= pages}
+              >
+                次へ →
+              </button>
             </div>
           )}
         </div>

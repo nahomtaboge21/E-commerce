@@ -6,6 +6,7 @@ require('dotenv').config();
 const connectDB = require('../../backend/lib/mongodb');
 const ensureDemoProducts = require('../../backend/lib/ensureDemoProducts');
 const Product = require('../../backend/models/Product');
+const { categories: CATEGORIES } = require('../../backend/data/db');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'shopwave_jwt_secret_2024';
 const app = express();
@@ -22,8 +23,6 @@ function adminOnly(req, res, next) {
   if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Admin access required' });
   next();
 }
-
-const CATEGORIES = ['Electronics', 'Fashion', 'Home & Garden', 'Sports', 'Books', 'Beauty', 'Toys', 'Automotive'];
 
 // GET /api/products/featured
 app.get(['/featured', '/api/products/featured'], async (req, res) => {

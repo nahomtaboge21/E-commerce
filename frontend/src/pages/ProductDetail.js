@@ -3,18 +3,30 @@ import { useParams, Link } from 'react-router-dom';
 import { productsAPI } from '../api';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/common/ProductCard';
+import fallbackProducts from '../data/products.json';
+import { formatYen } from '../utils/currency';
 import './ProductDetail.css';
 
 const Stars = ({ rating, count }) => (
   <div className="stars-row">
     <div className="stars">
-      {[1,2,3,4,5].map(i => (
-        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i <= Math.round(rating) ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <svg
+          key={i}
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill={i <= Math.round(rating) ? '#f59e0b' : 'none'}
+          stroke="#f59e0b"
+          strokeWidth="2"
+        >
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
         </svg>
       ))}
     </div>
-    <span>{rating} ({count?.toLocaleString()} reviews)</span>
+    <span className="stars-rating-text">
+      <strong>{rating.toFixed(1)}</strong>（{count?.toLocaleString()}件のカスタマーレビュー）
+    </span>
   </div>
 );
 
@@ -25,13 +37,26 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
   const { addItem } = useCart();
 
   useEffect(() => {
     setLoading(true);
-    productsAPI.getById(id)
-      .then(res => { setProduct(res.data); setRelated(res.data.related || []); setQty(1); })
-      .catch(console.error)
+    productsAPI
+      .getById(id)
+      .then((res) => {
+        setProduct(res.data);
+        setRelated(res.data.related || []);
+        setQty(1);
+        setActiveImgIndex(0);
+      })
+      .catch(() => {
+        const item = fallbackProducts.find((p) => p.id === id);
+        if (item) {
+          setProduct(item);
+          setRelated(fallbackProducts.filter((p) => p.category === item.category && p.id !== item.id));
+        }
+      })
       .finally(() => setLoading(false));
     window.scrollTo(0, 0);
   }, [id]);
@@ -39,114 +64,182 @@ export default function ProductDetail() {
   const handleAddToCart = () => {
     addItem(product, qty);
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    setTimeout(() => setAdded(false), 2200);
   };
 
-  if (loading) return <div style={{display:'flex', justifyContent:'center', padding:'100px'}}><div className="spinner" /></div>;
-  if (!product) return <div className="container" style={{padding:'80px 0', textAlign:'center'}}><p>Product not found</p><Link to="/shop" className="btn btn-primary" style={{marginTop:16}}>Back to Shop</Link></div>;
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '100px 0' }}>
+        <div className="spinner" />
+      </div>
+    );
+  }
 
-  const discount = product.originalPrice > product.price ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
+  if (!product) {
+    return (
+      <div className="container" style={{ padding: '80px 0', textAlign: 'center' }}>
+        <p>商品が見つかりませんでした。</p>
+        <Link to="/shop" className="btn btn-primary" style={{ marginTop: 16 }}>
+          全商品一覧へ戻る
+        </Link>
+      </div>
+    );
+  }
+
+  const discount =
+    product.originalPrice > product.price
+      ? Math.round((1 - product.price / product.originalPrice) * 100)
+      : 0;
+
+  const images = Array.isArray(product.images) && product.images.length
+    ? product.images
+    : [product.image];
 
   return (
     <div className="product-detail page">
       <div className="container">
-        <nav className="breadcrumb">
-          <Link to="/">Home</Link> / <Link to="/shop">Shop</Link> / <Link to={`/shop?category=${encodeURIComponent(product.category)}`}>{product.category}</Link> / <span>{product.name}</span>
+        <nav className="breadcrumb" aria-label="パンくずリスト">
+          <Link to="/">ホーム</Link> / <Link to="/shop">全商品</Link> /{' '}
+          <Link to={`/shop?category=${encodeURIComponent(product.category)}`}>
+            {product.category}
+          </Link>{' '}
+          / <span aria-current="page">{product.name}</span>
         </nav>
 
         <div className="detail-grid">
-          <div className="detail-image-wrap">
-            <img src={Array.isArray(product.images) ? (product.images[0] || product.image) : product.image} alt={product.name} />
-            {discount > 0 && <span className="detail-discount-badge">−{discount}% OFF</span>}
+          {/* Product Gallery */}
+          <div className="detail-gallery">
+            <div className="detail-image-wrap">
+              <img src={images[activeImgIndex] || images[0]} alt={product.name} />
+              {discount > 0 && (
+              <span className="detail-discount-badge">−{discount}%</span>
+              )}
+              <span className="detail-floating-perk">日本全国送料無料</span>
+            </div>
+            {images.length > 1 && (
+              <div className="detail-thumbs">
+                {images.map((img, i) => (
+                  <button
+                    key={i}
+                    className={`thumb-btn ${activeImgIndex === i ? 'active' : ''}`}
+                    onClick={() => setActiveImgIndex(i)}
+                    type="button"
+                  >
+                    <img src={img} alt="" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
+          {/* Product Info */}
           <div className="detail-info">
-            <span className="detail-category">{product.category}</span>
+            <div className="detail-badge-row">
+              <span className="detail-category">{product.category}</span>
+              <span className="badge-authentic">🌿 Kioluna 公式正規品</span>
+            </div>
+
             <h1 className="detail-name">{product.name}</h1>
-            <Stars rating={product.rating} count={product.reviews} />
+            {product.englishName && (
+              <p className="detail-english-name">{product.englishName}</p>
+            )}
+
+            {product.reviews > 0 && <Stars rating={product.rating} count={product.reviews} />}
 
             <div className="detail-pricing">
-              <span className="detail-price">${product.price.toFixed(2)}</span>
-              {discount > 0 && <>
-                <span className="detail-original">${product.originalPrice.toFixed(2)}</span>
-                <span className="badge badge-danger">Save ${(product.originalPrice - product.price).toFixed(2)}</span>
-              </>}
+              <span className="detail-price">{formatYen(product.price)}</span>
+              {discount > 0 && (
+                <>
+                  <span className="detail-original">{formatYen(product.originalPrice)}</span>
+                  <span className="badge badge-danger">
+                    {formatYen(product.originalPrice - product.price)} お得
+                  </span>
+                </>
+              )}
+              <span className="detail-tax-label">（税込・全国送料無料）</span>
             </div>
 
             <p className="detail-description">{product.description}</p>
 
             <div className="detail-stock">
-              {product.stock > 10 ? <span className="badge badge-success">✓ In Stock</span>
-              : product.stock > 0 ? <span className="badge badge-warning">Only {product.stock} left!</span>
-              : <span className="badge badge-danger">Out of Stock</span>}
+              {product.stock > 10 ? (
+                  <span className="badge badge-success">✓ 在庫あり（1〜2営業日以内に発送）</span>
+              ) : product.stock > 0 ? (
+                <span className="badge badge-warning">残りわずか（残り {product.stock} 点）</span>
+              ) : (
+                <span className="badge badge-danger">現在在庫切れ</span>
+              )}
             </div>
 
             {product.stock > 0 && (
               <div className="detail-add">
-                <div className="qty-control">
-                  <button onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
+                <div className="qty-control" aria-label="数量">
+                  <button onClick={() => setQty((q) => Math.max(1, q - 1))} type="button">
+                    −
+                  </button>
                   <span>{qty}</span>
-                  <button onClick={() => setQty(q => Math.min(product.stock, q + 1))}>+</button>
+                  <button onClick={() => setQty((q) => Math.min(product.stock, q + 1))} type="button">
+                    +
+                  </button>
                 </div>
-                <button className={`btn btn-accent btn-lg add-btn ${added ? 'added' : ''}`} onClick={handleAddToCart}>
-                  {added ? '✓ Added to Cart!' : 'Add to Cart'}
+                <button
+                  className={`btn btn-primary btn-lg add-btn ${added ? 'added' : ''}`}
+                  onClick={handleAddToCart}
+                  type="button"
+                >
+                  {added ? '✓ カートに追加しました！' : 'カートに追加する'}
                 </button>
               </div>
             )}
 
-            <div className="detail-tags">
-              {product.tags?.map(tag => <span key={tag} className="badge badge-muted">#{tag}</span>)}
+            {/* Kioluna Trust Highlights Box */}
+            <div className="detail-guarantee-card">
+              <div className="detail-guarantee-item">
+                <span className="guarantee-icon">🛡️</span>
+                <div>
+                    <strong>60日間返金保証</strong>
+                    <p>商品到着から60日以内であれば返品・返金を承ります。</p>
+                </div>
+              </div>
+              <div className="detail-guarantee-item">
+                <span className="guarantee-icon">📦</span>
+                <div>
+                  <strong>日本全国送料無料</strong>
+                  <p>追加の送料は一切かかりません。丁寧に梱包して発送します。</p>
+                </div>
+              </div>
+              <div className="detail-guarantee-item">
+                <span className="guarantee-icon">🔒</span>
+                <div>
+                    <strong>安心・安全なお支払い</strong>
+                    <p>安全な決済方法でお支払いいただけます。</p>
+                </div>
+              </div>
             </div>
 
-            <div className="detail-features">
-              {[
-                {
-                  icon: (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 7h12" />
-                      <path d="M5 7v10" />
-                      <path d="M21 7h-4l-3 5h-8" />
-                      <circle cx="7.5" cy="18.5" r="2.5" />
-                      <circle cx="18" cy="18.5" r="2.5" />
-                    </svg>
-                  ),
-                  text: 'Free shipping on orders over $200',
-                },
-                {
-                  icon: (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4 4v6h6" />
-                      <path d="M20 20v-6h-6" />
-                      <path d="M20 10a8 8 0 0 0-8-8" />
-                      <path d="M4 14a8 8 0 0 0 8 8" />
-                    </svg>
-                  ),
-                  text: '30-day returns',
-                },
-                {
-                  icon: (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 2l7 4v6c0 5-3.8 9.8-7 11-3.2-1.2-7-6-7-11V6l7-4z" />
-                      <path d="M9 12l2 2 4-4" />
-                    </svg>
-                  ),
-                  text: 'Secure checkout',
-                },
-              ].map(feature => (
-                <div key={feature.text} className="detail-feature">
-                  <span>{feature.icon}</span>
-                  <p>{feature.text}</p>
-                </div>
-              ))}
-            </div>
+            {product.tags && product.tags.length > 0 && (
+              <div className="detail-tags">
+                {product.tags.map((tag) => (
+                  <span key={tag} className="badge badge-muted">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Related Products */}
         {related.length > 0 && (
           <section className="related-section">
-            <h2 className="section-title">Related Products</h2>
+            <div className="related-header">
+              <span className="section-eyebrow">おすすめ商品</span>
+              <h2 className="section-title">あわせてチェックしたいアイテム</h2>
+            </div>
             <div className="related-grid">
-              {related.map(p => <ProductCard key={p.id} product={p} />)}
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
           </section>
         )}

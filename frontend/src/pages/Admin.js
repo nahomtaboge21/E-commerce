@@ -207,7 +207,7 @@ export default function Admin() {
             </div>
             <div className="stats-grid">
               {[
-                { label: 'Total Revenue', value: `$${stats.overview.totalRevenue.toLocaleString()}`, type: 'revenue', sub: `$${stats.overview.deliveredRevenue.toLocaleString()} delivered` },
+                { label: 'Total Revenue', value: `¥${Math.round(stats.overview.totalRevenue).toLocaleString()}`, type: 'revenue', sub: `¥${Math.round(stats.overview.deliveredRevenue).toLocaleString()} delivered` },
                 { label: 'Total Orders', value: stats.overview.totalOrders, type: 'orders', sub: `${stats.ordersByStatus.processing || 0} processing` },
                 { label: 'Products', value: stats.overview.totalProducts, type: 'products', sub: `${stats.lowStockProducts.length} low stock` },
                 { label: 'Customers', value: stats.overview.totalUsers, type: 'customers', sub: 'registered users' },
@@ -228,7 +228,7 @@ export default function Admin() {
                       <div><p style={{ fontWeight: 600, fontSize: 14 }}>{o.id}</p><p style={{ fontSize: 12, color: 'var(--text-muted)' }}>{new Date(o.createdAt).toLocaleDateString()}</p></div>
                       <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                         <span className={`badge ${STATUS_COLORS[o.status]}`}>{o.status}</span>
-                        <span style={{ fontWeight: 700 }}>${o.total.toFixed(2)}</span>
+                        <span style={{ fontWeight: 700 }}>¥{Math.round(o.total).toLocaleString()}</span>
                       </div>
                     </div>
                   ))}
@@ -317,7 +317,7 @@ export default function Admin() {
                     <tr key={p.id}>
                       <td><div style={{ display: 'flex', alignItems: 'center', gap: 12 }}><img src={Array.isArray(p.images) ? (p.images[0] || p.image) : p.image} alt={p.name} style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border)', flexShrink: 0 }} /><span style={{ fontWeight: 500, fontSize: 14 }}>{p.name}</span></div></td>
                       <td><span className="badge badge-muted">{p.category}</span></td>
-                      <td><strong>${p.price.toFixed(2)}</strong></td>
+                      <td><strong>¥{Math.round(p.price).toLocaleString()}</strong></td>
                       <td><span className={`badge ${p.stock === 0 ? 'badge-danger' : p.stock < 20 ? 'badge-warning' : 'badge-success'}`}>{p.stock}</span></td>
                       <td><span className="rating-pill">{p.rating}</span></td>
                       <td>
@@ -348,7 +348,7 @@ export default function Admin() {
                     <tr key={o.id}>
                       <td><span style={{ fontWeight: 700 }}>{o.id}</span></td>
                       <td><div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>{o.items.map(i => <img key={i.productId} src={Array.isArray(i.image) ? (i.image[0] || '') : i.image} alt={i.name} title={i.name} style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--border)' }} />)}</div></td>
-                      <td><strong>${o.total.toFixed(2)}</strong></td>
+                      <td><strong>¥{Math.round(o.total).toLocaleString()}</strong></td>
                       <td style={{ fontSize: 13, color: 'var(--text-muted)' }}>{new Date(o.createdAt).toLocaleDateString()}</td>
                       <td>
                         <select className="form-input" style={{ padding: '5px 8px', fontSize: 12, width: 'auto' }} value={o.status} onChange={e => handleStatusChange(o.id, e.target.value)}>

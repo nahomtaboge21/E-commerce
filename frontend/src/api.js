@@ -1,9 +1,13 @@
 import axios from 'axios';
 
 const api = axios.create({ baseURL: '/api' });
+const TOKEN_KEY = 'kioluna_token';
+const LEGACY_TOKEN_KEY = 'shopwave_token';
+const LEGACY_USER_KEY = 'shopwave_user';
 
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('shopwave_token');
+  const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY);
+  if (token && !localStorage.getItem(TOKEN_KEY)) localStorage.setItem(TOKEN_KEY, token);
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -12,10 +16,13 @@ api.interceptors.response.use(
   res => res,
   err => {
     if (err.response?.status === 401) {
-      localStorage.removeItem('shopwave_token');
-      localStorage.removeItem('shopwave_user');
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(LEGACY_TOKEN_KEY);
+      localStorage.removeItem('kioluna_user');
+      localStorage.removeItem(LEGACY_USER_KEY);
       if (window.location.pathname.startsWith('/admin') || window.location.pathname.startsWith('/profile')) {
-        window.location.href = '/login?redirect=/admin';
+        const redirect = encodeURIComponent(window.location.pathname);
+        window.location.href = `/login?redirect=${redirect}`;
       }
     }
     return Promise.reject(err);

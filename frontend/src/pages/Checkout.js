@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../api';
 import { saveRecentOrder } from '../utils/recentOrders';
+import { formatYen } from '../utils/currency';
 import './Checkout.css';
 
 function formatCard(val) {
@@ -15,7 +16,7 @@ function formatExpiry(val) {
 }
 
 function Steps({ current }) {
-  const steps = ['Shipping', 'Payment', 'Review'];
+  const steps = ['お届け先', 'お支払い', 'ご注文確認'];
   return (
     <div className="ck-steps">
       {steps.map((label, i) => {
@@ -48,32 +49,36 @@ function Field({ label, error, children }) {
   );
 }
 
-function SummaryPanel({ items, total, shipping, tax, orderTotal }) {
+const formatPrice = formatYen;
+
+function SummaryPanel({ items, total, orderTotal }) {
   return (
     <aside className="ck-summary">
-      <h3 className="ck-summary-title">Order Summary</h3>
+      <h3 className="ck-summary-title">ご注文内容</h3>
       <div className="ck-summary-items">
         {items.map(item => (
           <div key={item.id} className="ck-summary-item">
             <div className="ck-summary-img-wrap">
-              <img src={Array.isArray(item.image) ? item.image[0] : item.image} alt={item.name} />
+              <img src={Array.isArray(item.image) ? item.image[0] : (Array.isArray(item.images) ? item.images[0] : item.image)} alt={item.name} />
               <span className="ck-summary-qty">{item.quantity}</span>
             </div>
             <p className="ck-summary-name">{item.name}</p>
-            <span className="ck-summary-price">${(item.price * item.quantity).toFixed(2)}</span>
+            <span className="ck-summary-price">{formatPrice(item.price * item.quantity)}</span>
           </div>
         ))}
       </div>
       <div className="ck-summary-totals">
-        <div className="ck-row"><span>Subtotal</span><span>${total.toFixed(2)}</span></div>
+        <div className="ck-row"><span>小計</span><span>{formatPrice(total)}</span></div>
         <div className="ck-row">
-          <span>Shipping</span>
-          <span className={shipping === 0 ? 'ck-free' : ''}>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+          <span>送料</span>
+          <span className="ck-free">無料（日本全国）</span>
         </div>
-        <div className="ck-row"><span>Tax (8%)</span><span>${tax.toFixed(2)}</span></div>
-        <div className="ck-row ck-row-total"><span>Total</span><span>${orderTotal.toFixed(2)}</span></div>
+        <div className="ck-row"><span>表示価格は税込です</span></div>
+        <div className="ck-row ck-row-total"><span>合計（税込）</span><span>{formatPrice(orderTotal)}</span></div>
       </div>
-      {shipping > 0 && <p className="ck-free-ship-note">Add ${(50 - total).toFixed(2)} more for free shipping</p>}
+      <div className="ck-guarantee-pill">
+        <span>🛡️ 60日間安心返金保証対象</span>
+      </div>
     </aside>
   );
 }
@@ -81,40 +86,36 @@ function SummaryPanel({ items, total, shipping, tax, orderTotal }) {
 function StepShipping({ form, set, errors }) {
   return (
     <div className="ck-section">
-      <h2 className="ck-section-title">Shipping Information</h2>
+      <h2 className="ck-section-title">お届け先情報</h2>
       <div className="ck-grid-2">
-        <Field label="First Name" error={errors.firstName}>
-          <input className={`ck-input${errors.firstName ? ' ck-input-err' : ''}`} value={form.firstName} onChange={e => set('firstName', e.target.value)} placeholder="John" />
+        <Field label="姓" error={errors.firstName}>
+          <input className={`ck-input${errors.firstName ? ' ck-input-err' : ''}`} value={form.firstName} onChange={e => set('firstName', e.target.value)} placeholder="山田" />
         </Field>
-        <Field label="Last Name" error={errors.lastName}>
-          <input className={`ck-input${errors.lastName ? ' ck-input-err' : ''}`} value={form.lastName} onChange={e => set('lastName', e.target.value)} placeholder="Doe" />
+        <Field label="名" error={errors.lastName}>
+          <input className={`ck-input${errors.lastName ? ' ck-input-err' : ''}`} value={form.lastName} onChange={e => set('lastName', e.target.value)} placeholder="花子" />
         </Field>
       </div>
-      <Field label="Email Address" error={errors.email}>
-        <input className={`ck-input${errors.email ? ' ck-input-err' : ''}`} type="email" value={form.email} onChange={e => set('email', e.target.value)} placeholder="john@example.com" />
+      <Field label="メールアドレス" error={errors.email}>
+        <input className={`ck-input${errors.email ? ' ck-input-err' : ''}`} type="email" value={form.email} onChange={e => set('email', e.target.value)} placeholder="name@example.com" />
       </Field>
-      <Field label="Street Address" error={errors.street}>
-        <input className={`ck-input${errors.street ? ' ck-input-err' : ''}`} value={form.street} onChange={e => set('street', e.target.value)} placeholder="123 Main Street" />
+      <Field label="住所" error={errors.street}>
+        <input className={`ck-input${errors.street ? ' ck-input-err' : ''}`} value={form.street} onChange={e => set('street', e.target.value)} placeholder="番地・建物名" />
       </Field>
       <div className="ck-grid-2">
-        <Field label="City" error={errors.city}>
-          <input className={`ck-input${errors.city ? ' ck-input-err' : ''}`} value={form.city} onChange={e => set('city', e.target.value)} placeholder="New York" />
+        <Field label="市区町村" error={errors.city}>
+          <input className={`ck-input${errors.city ? ' ck-input-err' : ''}`} value={form.city} onChange={e => set('city', e.target.value)} placeholder="渋谷区" />
         </Field>
-        <Field label="State" error={errors.state}>
-          <input className={`ck-input${errors.state ? ' ck-input-err' : ''}`} value={form.state} onChange={e => set('state', e.target.value)} placeholder="NY" />
+        <Field label="都道府県" error={errors.state}>
+          <input className={`ck-input${errors.state ? ' ck-input-err' : ''}`} value={form.state} onChange={e => set('state', e.target.value)} placeholder="東京都" />
         </Field>
       </div>
       <div className="ck-grid-2">
-        <Field label="ZIP Code" error={errors.zip}>
-          <input className={`ck-input${errors.zip ? ' ck-input-err' : ''}`} value={form.zip} onChange={e => set('zip', e.target.value)} placeholder="10001" />
+        <Field label="郵便番号" error={errors.zip}>
+          <input className={`ck-input${errors.zip ? ' ck-input-err' : ''}`} value={form.zip} onChange={e => set('zip', e.target.value)} placeholder="150-0001" autoComplete="postal-code" />
         </Field>
-        <Field label="Country">
+        <Field label="国・地域">
           <select className="ck-input" value={form.country} onChange={e => set('country', e.target.value)}>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="GB">United Kingdom</option>
-            <option value="AU">Australia</option>
-            <option value="ET">Ethiopia</option>
+            <option value="JP">日本</option>
           </select>
         </Field>
       </div>
@@ -123,10 +124,10 @@ function StepShipping({ form, set, errors }) {
 }
 
 const PAYMENT_METHODS = [
-  { id: 'card', label: 'Credit / Debit Card' },
-  { id: 'paypal', label: 'PayPal' },
+  { id: 'card', label: 'クレジットカード' },
+  { id: 'shoppay', label: 'Shop Pay' },
+  { id: 'googlepay', label: 'Google Pay' },
   { id: 'applepay', label: 'Apple Pay' },
-  { id: 'cod', label: 'Cash on Delivery' },
 ];
 
 function VisaIcon() {
@@ -153,15 +154,6 @@ function MastercardIcon() {
   );
 }
 
-function PayPalIcon() {
-  return (
-    <svg width="80" height="26" viewBox="0 0 80 26">
-      <text x="2" y="20" fontFamily="Arial" fontWeight="900" fontSize="18" fill="#003087">Pay</text>
-      <text x="30" y="20" fontFamily="Arial" fontWeight="900" fontSize="18" fill="#009CDE">Pal</text>
-    </svg>
-  );
-}
-
 function ApplePayIcon() {
   return (
     <svg width="56" height="26" viewBox="0 0 56 26" fill="none">
@@ -171,25 +163,16 @@ function ApplePayIcon() {
   );
 }
 
-function CodIcon() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.8">
-      <rect x="2" y="6" width="20" height="14" rx="2"/>
-      <path d="M2 10h20"/><circle cx="12" cy="15" r="2"/>
-    </svg>
-  );
-}
-
-const PM_ICONS = { card: null, paypal: <PayPalIcon/>, applepay: <ApplePayIcon/>, cod: <CodIcon/> };
+const PM_ICONS = { card: null, shoppay: <span>Shop Pay</span>, googlepay: <span>G Pay</span>, applepay: <ApplePayIcon/> };
 
 function StepPayment({ form, set, errors }) {
   const method = form.paymentMethod || 'card';
   return (
     <div className="ck-section">
-      <h2 className="ck-section-title">Payment Method</h2>
+      <h2 className="ck-section-title">お支払い方法</h2>
       <div className="ck-secure-badge">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Secure, encrypted checkout
+        安心・安全な暗号化決済
       </div>
 
       <div className="ck-methods">
@@ -205,41 +188,39 @@ function StepPayment({ form, set, errors }) {
 
       {method === 'card' && (
         <div className="ck-card-fields">
-          <Field label="Cardholder Name" error={errors.cardName}>
-            <input className={`ck-input${errors.cardName ? ' ck-input-err' : ''}`} value={form.cardName} onChange={e => set('cardName', e.target.value)} placeholder="John Doe" autoComplete="cc-name" />
+          <Field label="カード名義" error={errors.cardName}>
+            <input className={`ck-input${errors.cardName ? ' ck-input-err' : ''}`} value={form.cardName} onChange={e => set('cardName', e.target.value)} placeholder="HANAKO YAMADA" autoComplete="cc-name" />
           </Field>
-          <Field label="Card Number" error={errors.cardNumber}>
+          <Field label="カード番号" error={errors.cardNumber}>
             <input className={`ck-input${errors.cardNumber ? ' ck-input-err' : ''}`} value={form.cardNumber} onChange={e => set('cardNumber', formatCard(e.target.value))} placeholder="4242 4242 4242 4242" inputMode="numeric" autoComplete="cc-number" />
           </Field>
           <div className="ck-grid-2">
-            <Field label="Expiry" error={errors.cardExpiry}>
+            <Field label="有効期限" error={errors.cardExpiry}>
               <input className={`ck-input${errors.cardExpiry ? ' ck-input-err' : ''}`} value={form.cardExpiry} onChange={e => set('cardExpiry', formatExpiry(e.target.value))} placeholder="MM/YY" inputMode="numeric" autoComplete="cc-exp" />
             </Field>
-            <Field label="CVV" error={errors.cardCvv}>
+            <Field label="セキュリティコード" error={errors.cardCvv}>
               <input className={`ck-input${errors.cardCvv ? ' ck-input-err' : ''}`} value={form.cardCvv} onChange={e => set('cardCvv', e.target.value.replace(/\D/g,'').slice(0,4))} placeholder="***" inputMode="numeric" type="password" autoComplete="cc-csc" />
             </Field>
           </div>
-          <p className="ck-demo-hint">Demo mode - no real payment is processed.</p>
+          <p className="ck-demo-hint">デモ画面のため、実際の決済は行われません。</p>
         </div>
       )}
 
-      {method === 'paypal' && <div className="ck-alt-method-msg"><PayPalIcon/><p>You'll be redirected to PayPal to complete your payment securely.</p></div>}
-      {method === 'applepay' && <div className="ck-alt-method-msg"><ApplePayIcon/><p>Confirm payment using Face ID or Touch ID on your Apple device.</p></div>}
-      {method === 'cod' && <div className="ck-alt-method-msg ck-cod-msg"><CodIcon/><p>Pay in cash when your order is delivered. No online payment needed.</p></div>}
+      {method !== 'card' && <div className="ck-alt-method-msg"><p>{method === 'applepay' ? 'Apple Pay' : method === 'googlepay' ? 'Google Pay' : 'Shop Pay'} を選択しました。デモ画面のため、実際の決済は行われません。</p></div>}
     </div>
   );
 }
 
 function StepReview({ form, items, error, setStep }) {
   const method = form.paymentMethod || 'card';
-  const methodLabel = PAYMENT_METHODS.find(p => p.id === method)?.label || 'Card';
+  const methodLabel = PAYMENT_METHODS.find(p => p.id === method)?.label || 'クレジットカード';
   return (
     <div className="ck-section">
-      <h2 className="ck-section-title">Review Your Order</h2>
+      <h2 className="ck-section-title">ご注文内容の確認</h2>
       <div className="ck-review-block">
         <div className="ck-review-header">
-          <span>Shipping to</span>
-          <button className="ck-review-edit" type="button" onClick={() => setStep(1)}>Edit</button>
+          <span>お届け先</span>
+          <button className="ck-review-edit" type="button" onClick={() => setStep(1)}>変更</button>
         </div>
         <p className="ck-review-val">{form.firstName} {form.lastName}</p>
         <p className="ck-review-val ck-muted">{form.street}, {form.city}, {form.state} {form.zip}</p>
@@ -247,8 +228,8 @@ function StepReview({ form, items, error, setStep }) {
       </div>
       <div className="ck-review-block">
         <div className="ck-review-header">
-          <span>Payment</span>
-          <button className="ck-review-edit" type="button" onClick={() => setStep(2)}>Edit</button>
+          <span>お支払い方法</span>
+          <button className="ck-review-edit" type="button" onClick={() => setStep(2)}>変更</button>
         </div>
         <p className="ck-review-val">
           {methodLabel}
@@ -261,9 +242,9 @@ function StepReview({ form, items, error, setStep }) {
             <img src={Array.isArray(item.image) ? item.image[0] : item.image} alt={item.name} />
             <div className="ck-review-item-info">
               <p>{item.name}</p>
-              <span className="ck-muted">Qty {item.quantity}</span>
+              <span className="ck-muted">数量 {item.quantity}</span>
             </div>
-            <span className="ck-review-item-price">${(item.price * item.quantity).toFixed(2)}</span>
+            <span className="ck-review-item-price">{formatPrice(item.price * item.quantity)}</span>
           </div>
         ))}
       </div>
@@ -286,7 +267,7 @@ export default function Checkout() {
     firstName: user?.name?.split(' ')[0] || '',
     lastName: user?.name?.split(' ')[1] || '',
     email: user?.email || '',
-    street: '', city: '', state: '', zip: '', country: 'US',
+    street: '', city: '', state: '', zip: '', country: 'JP',
     paymentMethod: 'card',
     cardNumber: '', cardExpiry: '', cardCvv: '', cardName: '',
   });
@@ -296,17 +277,15 @@ export default function Checkout() {
     setErrors(e => ({ ...e, [key]: '' }));
   };
 
-  const shipping = total >= 50 ? 0 : 9.99;
-  const tax = total * 0.08;
-  const orderTotal = total + shipping + tax;
+  const orderTotal = total;
 
   if (!items.length) return (
     <div className="ck-empty page">
       <div className="container">
         <div className="ck-empty-icon">Cart</div>
-        <h2>Your cart is empty</h2>
-        <p>Add some items before checking out.</p>
-        <Link to="/shop" className="btn btn-primary">Browse Shop</Link>
+        <h2>カートは空です</h2>
+        <p>購入する商品を選んでください。</p>
+        <Link to="/shop" className="btn btn-primary">商品一覧を見る</Link>
       </div>
     </div>
   );
@@ -314,19 +293,19 @@ export default function Checkout() {
   function validateStep(s) {
     const nextErrors = {};
     if (s === 1) {
-      if (!form.firstName.trim()) nextErrors.firstName = 'Required';
-      if (!form.lastName.trim()) nextErrors.lastName = 'Required';
-      if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) nextErrors.email = 'Valid email required';
-      if (!form.street.trim()) nextErrors.street = 'Required';
-      if (!form.city.trim()) nextErrors.city = 'Required';
-      if (!form.state.trim()) nextErrors.state = 'Required';
-      if (!form.zip.trim()) nextErrors.zip = 'Required';
+      if (!form.firstName.trim()) nextErrors.firstName = '入力してください';
+      if (!form.lastName.trim()) nextErrors.lastName = '入力してください';
+      if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) nextErrors.email = '有効なメールアドレスを入力してください';
+      if (!form.street.trim()) nextErrors.street = '入力してください';
+      if (!form.city.trim()) nextErrors.city = '入力してください';
+      if (!form.state.trim()) nextErrors.state = '入力してください';
+      if (!form.zip.trim()) nextErrors.zip = '入力してください';
     }
     if (s === 2 && form.paymentMethod === 'card') {
-      if (form.cardNumber.replace(/\s/g, '').length < 16) nextErrors.cardNumber = 'Enter a valid 16-digit card number';
-      if (!form.cardName.trim()) nextErrors.cardName = 'Required';
-      if (form.cardExpiry.length < 5) nextErrors.cardExpiry = 'Enter MM/YY';
-      if (form.cardCvv.length < 3) nextErrors.cardCvv = 'Enter CVV';
+      if (form.cardNumber.replace(/\s/g, '').length < 16) nextErrors.cardNumber = '有効なカード番号を入力してください';
+      if (!form.cardName.trim()) nextErrors.cardName = '入力してください';
+      if (form.cardExpiry.length < 5) nextErrors.cardExpiry = '月/年の形式で入力してください';
+      if (form.cardCvv.length < 3) nextErrors.cardCvv = 'セキュリティコードを入力してください';
     }
     return nextErrors;
   }
@@ -358,7 +337,7 @@ export default function Checkout() {
       clearCart();
       navigate(`/order-confirmation/${res.data.id}?token=${encodeURIComponent(res.data.publicToken || '')}`);
     } catch (err) {
-      setError(err.response?.data?.error || 'Something went wrong. Please try again.');
+      setError(err.response?.data?.error || 'エラーが発生しました。もう一度お試しください。');
       setLoading(false);
     }
   }
@@ -372,16 +351,16 @@ export default function Checkout() {
           {step === 2 && <StepPayment form={form} set={set} errors={errors} />}
           {step === 3 && <StepReview form={form} items={items} error={error} setStep={setStep} />}
           <div className="ck-nav">
-            {step > 1 && <button type="button" className="btn btn-outline" onClick={back}>Back</button>}
-            {step < 3 && <button type="button" className="btn btn-primary ck-btn-continue" onClick={next}>Continue</button>}
+            {step > 1 && <button type="button" className="btn btn-outline" onClick={back}>前へ戻る</button>}
+            {step < 3 && <button type="button" className="btn btn-primary ck-btn-continue" onClick={next}>次へ進む</button>}
             {step === 3 && (
               <button type="button" className="btn btn-primary ck-btn-continue" onClick={placeOrder} disabled={loading}>
-                {loading ? <><span className="spinner" style={{ width: 16, height: 16 }}/> Processing...</> : `Place Order - $${orderTotal.toFixed(2)}`}
+                {loading ? <><span className="spinner" style={{ width: 16, height: 16 }}/> 処理中...</> : `注文を確定する - ${formatPrice(orderTotal)}`}
               </button>
             )}
           </div>
         </div>
-        <SummaryPanel items={items} total={total} shipping={shipping} tax={tax} orderTotal={orderTotal} />
+        <SummaryPanel items={items} total={total} orderTotal={orderTotal} />
       </div>
     </div>
   );

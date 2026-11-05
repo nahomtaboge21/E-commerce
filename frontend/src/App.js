@@ -13,6 +13,7 @@ import Orders from './pages/Orders';
 import { Login } from './pages/Auth';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
+import SupportPages from './pages/SupportPages';
 import './styles/globals.css';
 
 function Layout({ children, noFooter }) {
@@ -41,7 +42,14 @@ export default function App() {
             <Route path="/profile" element={<Layout><Profile /></Layout>} />
             <Route path="/login" element={<Layout noFooter><Login /></Layout>} />
             <Route path="/admin" element={<Layout noFooter><Admin /></Layout>} />
-            <Route path="*" element={<Layout><div style={{textAlign:'center',padding:'100px 20px'}}><h1 style={{fontFamily:'var(--font-display)',fontSize:80,fontWeight:800,color:'var(--surface-3)'}}>404</h1><p style={{fontSize:18,color:'var(--text-secondary)',marginBottom:24}}>Page not found</p><a href="/" className="btn btn-primary">Go Home</a></div></Layout>} />
+            <Route path="/faq" element={<Layout><SupportPages /></Layout>} />
+            <Route path="/contact" element={<Layout><SupportPages /></Layout>} />
+            <Route path="/track-order" element={<Layout><SupportPages /></Layout>} />
+            <Route path="/shipping-policy" element={<Layout><SupportPages /></Layout>} />
+            <Route path="/refund-policy" element={<Layout><SupportPages /></Layout>} />
+            <Route path="/terms-of-service" element={<Layout><SupportPages /></Layout>} />
+            <Route path="/privacy-policy" element={<Layout><SupportPages /></Layout>} />
+            <Route path="*" element={<Layout><div style={{textAlign:'center',padding:'100px 20px'}}><h1 style={{fontFamily:'var(--font-display)',fontSize:80,fontWeight:800,color:'var(--surface-3)'}}>404</h1><p style={{fontSize:18,color:'var(--text-secondary)',marginBottom:24}}>ページが見つかりませんでした</p><a href="/" className="btn btn-primary">ホームへ戻る</a></div></Layout>} />
           </Routes>
         </CartProvider>
       </AuthProvider>

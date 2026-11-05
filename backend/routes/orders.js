@@ -3,6 +3,11 @@ const router = express.Router();
 const { orders, products, uuidv4 } = require('../data/db');
 const { authenticate, adminOnly } = require('../middleware/auth');
 
+const optionalAuthenticate = (req, res, next) => {
+  if (!req.headers.authorization) return next();
+  return authenticate(req, res, next);
+};
+
 // GET /api/orders — user's own orders (admin gets all)
 router.get('/', authenticate, (req, res) => {
   const userOrders = req.user.role === 'admin' ? orders : orders.filter(o => o.userId === req.user.id);
@@ -18,8 +23,8 @@ router.get('/:id', authenticate, (req, res) => {
 });
 
 // POST /api/orders — create order
-router.post('/', authenticate, (req, res) => {
-  const { items, shippingAddress, paymentMethod } = req.body;
+router.post('/', optionalAuthenticate, (req, res) => {
+  const { items, shippingAddress, paymentMethod, customerName, customerEmail } = req.body;
   if (!items || !items.length) return res.status(400).json({ error: 'Order must have items' });
   if (!shippingAddress) return res.status(400).json({ error: 'Shipping address required' });
 
@@ -38,8 +43,10 @@ router.post('/', authenticate, (req, res) => {
 
   const order = {
     id: 'ORD-' + String(orders.length + 1).padStart(3, '0'),
-    userId: req.user.id,
-    userName: req.user.name,
+    userId: req.user?.id || null,
+    userName: req.user?.name || customerName || '',
+    customerName: customerName || req.user?.name || '',
+    customerEmail: customerEmail || req.user?.email || '',
     items: enrichedItems,
     total: Math.round(total * 100) / 100,
     status: 'processing',

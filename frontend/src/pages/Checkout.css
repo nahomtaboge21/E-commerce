@@ -57,7 +57,18 @@
   transition: all 0.2s;
 }
 .ck-step-dot.active { border-color: var(--primary); background: var(--primary); color: #fff; }
-.ck-step-dot.done { border-color: #22c55e; background: #22c55e; color: #fff; }
+.ck-step-dot.done { border-color: var(--primary); background: var(--primary); color: #fff; }
+
+.ck-guarantee-pill {
+  margin-top: 14px;
+  background: var(--primary-tint);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: center;
+}
 .ck-step-label {
   font-size: 12px;
   font-weight: 500;
