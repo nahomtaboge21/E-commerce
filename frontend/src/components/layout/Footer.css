@@ -84,6 +84,13 @@
   font-weight: 800;
 }
 
+.footer-links .footer-track-link:hover,
+.footer-links .footer-track-link:focus-visible {
+  background: #0f2b1d;
+  color: #ffffff;
+  text-decoration: none;
+}
+
 .footer-newsletter {
   display: flex;
   gap: 8px;
