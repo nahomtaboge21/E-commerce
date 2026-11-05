@@ -1,16 +1,16 @@
 {
-  "short_name": "Kioluna",
-  "name": "Kioluna（キオルナ）公式オンラインストア",
+  "short_name": "Luniva",
+  "name": "Luniva 公式オンラインストア",
   "icons": [
     {
-      "src": "favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "luniva-logo.png",
+      "sizes": "332x341",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#1f6f5c",
+  "theme_color": "#143525",
   "background_color": "#fbfaf7"
 }

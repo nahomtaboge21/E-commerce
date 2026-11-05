@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
-import kiolunaLogo from '../../assets/kioluna-logo.png';
+import lunivaLogo from '../../assets/luniva-logo.png';
 import './Footer.css';
 
 export default function Footer() {
   return (
-    <footer className="kioluna-footer">
+    <footer className="site-footer">
       <div className="container footer-inner">
         <section className="footer-support">
           <h2>ご質問はありますか？</h2>
           <p>専門スタッフが月曜日〜土曜日の9:00〜19:00まで、商品に関するご相談やその他のお問い合わせにお答えします。</p>
-          <a href="mailto:info@kioluna.com">info@kioluna.com</a>
+          <a href="mailto:info@luniva.com">info@luniva.com</a>
         </section>
 
         <nav className="footer-links" aria-label="インフォメーション">
@@ -28,8 +28,8 @@ export default function Footer() {
           <h2>コミュニティに参加する</h2>
           <p>新商品のお知らせ、おすすめの使い方、限定クーポンをメールでお届けします。</p>
           <form className="footer-newsletter" onSubmit={(event) => event.preventDefault()}>
-            <label className="sr-only" htmlFor="kioluna-newsletter-email">メール</label>
-            <input id="kioluna-newsletter-email" type="email" placeholder="メール" autoComplete="email" required />
+            <label className="sr-only" htmlFor="luniva-newsletter-email">メール</label>
+            <input id="luniva-newsletter-email" type="email" placeholder="メール" autoComplete="email" required />
             <button type="submit">登録する</button>
           </form>
         </section>
@@ -49,8 +49,8 @@ export default function Footer() {
       </div>
 
       <div className="footer-wordmark-wrap">
-        <Link to="/" aria-label="Kioluna ホーム">
-          <img className="footer-wordmark-img" src={kiolunaLogo} alt="Kioluna" />
+        <Link to="/" aria-label="Luniva ホーム">
+          <img className="footer-wordmark-img" src={lunivaLogo} alt="Luniva" />
         </Link>
       </div>
     </footer>

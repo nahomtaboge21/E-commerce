@@ -9,7 +9,7 @@
 }
 
 .product-card:hover {
-  box-shadow: 0 12px 30px rgba(31, 111, 92, 0.12);
+  box-shadow: 0 12px 30px rgba(20, 53, 37, 0.12);
   transform: translateY(-3px);
   border-color: var(--border-strong);
 }

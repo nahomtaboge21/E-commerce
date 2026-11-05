@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import kiolunaLogo from '../assets/kioluna-logo.png';
+import lunivaLogo from '../assets/luniva-logo.png';
 import './Auth.css';
 
 export function Login() {
@@ -35,9 +35,9 @@ export function Login() {
   return (
     <div className="auth-page page">
       <div className="auth-card card">
-        <div className="auth-logo"><img src={kiolunaLogo} alt="Kioluna" /></div>
+        <div className="auth-logo"><img src={lunivaLogo} alt="Luniva" /></div>
         <h1>{mode === 'login' ? 'ログイン' : 'アカウントを作成'}</h1>
-        <p className="auth-sub">{mode === 'login' ? 'ご注文やアカウント情報をご確認いただけます。' : 'Kiolunaへようこそ。必要事項をご入力ください。'}</p>
+        <p className="auth-sub">{mode === 'login' ? 'ご注文やアカウント情報をご確認いただけます。' : 'Lunivaへようこそ。必要事項をご入力ください。'}</p>
         <form onSubmit={handleSubmit}>
           {mode === 'register' && <div className="form-group"><label className="form-label">お名前</label><input className="form-input" value={form.name} onChange={event => setForm(current => ({ ...current, name: event.target.value }))} required autoComplete="name" /></div>}
           <div className="form-group">

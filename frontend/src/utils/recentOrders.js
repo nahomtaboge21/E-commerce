@@ -38,12 +38,12 @@ export function downloadReceipt(order) {
   const tax = Math.max(order.total - subtotal - shipping, 0);
   const customer = order.customerName || order.userName || 'Guest';
 
-  doc.setFillColor(31, 111, 92);
+  doc.setFillColor(20, 53, 37);
   doc.roundedRect(12, 12, 186, 34, 8, 8, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(24);
-  doc.text('Kioluna Receipt', 20, 27);
+  doc.text('Luniva Receipt', 20, 27);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.setTextColor(226, 232, 240);
@@ -125,7 +125,7 @@ export function downloadReceipt(order) {
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(9);
   doc.setTextColor(100, 116, 139);
-  doc.text('Thank you for shopping with Kioluna.', 20, 285);
+  doc.text('Thank you for shopping with Luniva.', 20, 285);
 
   doc.save(`${order.id}-receipt.pdf`);
 }

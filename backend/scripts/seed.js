@@ -16,19 +16,19 @@ async function seed() {
 
   // Seed products
   await Product.insertMany(products.map(({ id, ...p }) => p));
-  console.log(`Seeded ${products.length} Kioluna products`);
+  console.log(`Seeded ${products.length} Luniva products`);
 
   // Seed users
   const adminPass = await bcrypt.hash('admin123', 10);
   const userPass  = await bcrypt.hash('user123', 10);
   await User.insertMany([
-    { name: 'Admin Kioluna', email: 'admin@kioluna.com', password: adminPass, role: 'admin', avatar: 'AK' },
+    { name: 'Admin Luniva', email: 'admin@luniva.com', password: adminPass, role: 'admin', avatar: 'AL' },
     { name: '美咲 (Misaki)', email: 'misaki@example.com', password: userPass, role: 'user', avatar: '美' },
     { name: '由香 (Yuka)', email: 'yuka@example.com', password: userPass, role: 'user', avatar: '由' },
   ]);
   console.log('Seeded 3 users');
   console.log('\nDone! ✅');
-  console.log('Admin:  admin@kioluna.com / admin123');
+  console.log('Admin:  admin@luniva.com / admin123');
   console.log('User:   misaki@example.com / user123');
   process.exit(0);
 }

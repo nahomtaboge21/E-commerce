@@ -1,6 +1,6 @@
-# Kioluna（キオルナ）— Official E-Commerce Storefront
+# Luniva — Official E-Commerce Storefront
 
-A complete full-stack Japanese lifestyle and care storefront modeled after **[kioluna.com](https://kioluna.com/)**, featuring a primary dark green brand aesthetic (`#1b4332`), responsive React frontend, and Node.js/Express backend.
+A complete full-stack Japanese lifestyle and care storefront inspired by **[kioluna.com](https://kioluna.com/)**, featuring Luniva dark green branding (`#143525`), a responsive React frontend, and a Node.js/Express backend.
 
 ---
 

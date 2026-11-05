@@ -31,7 +31,7 @@ const orderItem = (productId, quantity) => {
 };
 
 const users = [
-  { id: 'u1', name: 'Admin Kioluna', email: 'admin@kioluna.com', password: adminPassword, role: 'admin', createdAt: '2024-01-01T00:00:00Z', avatar: 'AK' },
+  { id: 'u1', name: 'Admin Luniva', email: 'admin@luniva.com', password: adminPassword, role: 'admin', createdAt: '2024-01-01T00:00:00Z', avatar: 'AL' },
   { id: 'u2', name: '美咲 (Misaki)', email: 'misaki@example.com', password: userPassword, role: 'user', createdAt: '2024-03-15T10:00:00Z', avatar: '美' },
   { id: 'u3', name: '由香 (Yuka)', email: 'yuka@example.com', password: userPassword, role: 'user', createdAt: '2024-04-20T14:00:00Z', avatar: '由' }
 ];

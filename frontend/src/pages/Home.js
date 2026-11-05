@@ -40,11 +40,11 @@ export default function Home() {
           <p>シンプルで、品質が高く、実感できる結果。毎日の暮らしをもっと快適にするために選び抜きました。</p>
         </div>
         <div className="kioluna-hero-image">
-          <img src={heroImage} alt="Kiolunaのスキンケアと、毎日のセルフケア" />
+          <img src={heroImage} alt="Lunivaのスキンケアと、毎日のセルフケア" />
         </div>
       </section>
 
-      <section className="kioluna-perks-section" aria-label="Kiolunaのお約束">
+      <section className="kioluna-perks-section" aria-label="Lunivaのお約束">
         <div className="kioluna-home-wrap kioluna-perks-grid">
           <div className="kioluna-perk-card"><span className="kioluna-perk-icon">🚚</span><span>日本全国<br />送料無料</span></div>
           <div className="kioluna-perk-card"><span className="kioluna-perk-icon">🛡️</span><span>60日間<br />返金保証</span></div>
@@ -55,9 +55,9 @@ export default function Home() {
 
       <section className="kioluna-why-section">
         <div className="kioluna-home-wrap">
-          <div className="kioluna-why-eyebrow">Kiolunaが選ばれる理由</div>
+          <div className="kioluna-why-eyebrow">Lunivaが選ばれる理由</div>
           <h2>品質と実感を、シンプルに。</h2>
-          <p className="kioluna-why-lead">Kiolunaでは、信頼できて使いやすいアイテムだけを厳選。毎日のルーティンと健やかさを、少しずつ良くしていきます。</p>
+          <p className="kioluna-why-lead">Lunivaでは、信頼できて使いやすいアイテムだけを厳選。毎日のルーティンと健やかさを、少しずつ良くしていきます。</p>
           <div className="kioluna-why-grid">
             {REASONS.map(([icon, title, description]) => (
               <article className="kioluna-why-card" key={title}>

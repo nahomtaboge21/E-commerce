@@ -71,7 +71,7 @@
 @media (max-width: 768px) { .admin-sidebar { display: none; } .admin-content { padding: 18px 14px 28px; } .admin-mobile-tabs { display: flex; } .admin-title { font-size: 26px; margin-bottom: 18px; } .admin-hero { padding: 22px; border-radius: 24px; } .admin-subtitle { font-size: 14px; } .stats-grid { grid-template-columns: 1fr; gap: 14px; } .form-row-3 { grid-template-columns: 1fr; } .admin-msg { width: 100%; justify-content: space-between; } .admin-table { min-width: 720px; } .admin-header-row { flex-direction: column; align-items: stretch; } }
 @media (max-width: 520px) { .admin { min-height: auto; } .stat-card { padding: 18px; border-radius: 18px; } .admin-table th, .admin-table td { padding: 12px 14px; } .admin-hero-chip { width: 100%; } .admin-panel-card, .admin-editor-card, .admin-table-wrap { border-radius: 20px; } }
 
-/* Keep the management workspace inside Kioluna's green palette. */
+/* Keep the management workspace inside Luniva's green palette. */
 .admin { background: linear-gradient(180deg, #f8f8f3, #eef2e9); }
 .admin-sidebar { background: linear-gradient(180deg, #214c35, #173c2a); }
 .admin-nav-btn.active { background: linear-gradient(90deg, rgba(138,190,147,.28), rgba(138,190,147,.08)); border-right-color: #a5c9a8; }

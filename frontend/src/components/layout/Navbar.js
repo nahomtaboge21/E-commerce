@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import kiolunaLogo from '../../assets/kioluna-logo.png';
+import lunivaLogo from '../../assets/luniva-logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -58,7 +58,7 @@ export default function Navbar() {
       {/* Top Announcement Bar */}
       <div className="nav-topbar">
         <div className="container topbar-inner">
-          <div className="topbar-marquee-wrap" aria-label="Kiolunaのお知らせ">
+          <div className="topbar-marquee-wrap" aria-label="Lunivaのお知らせ">
             <div className="topbar-marquee">
               <span className="topbar-marquee-item">100,000人以上のお客様にご愛用いただいています</span>
               <span className="topbar-dot" aria-hidden="true">|</span>
@@ -71,10 +71,10 @@ export default function Navbar() {
       {/* Main Navbar */}
       <nav className="nav-main-sticky">
         <div className="container nav-inner">
-          <Link to="/" className="nav-logo" aria-label="Kioluna ホーム">
+          <Link to="/" className="nav-logo" aria-label="Luniva ホーム">
             <img
-              src={kiolunaLogo}
-              alt="Kioluna"
+              src={lunivaLogo}
+              alt="Luniva"
               className="nav-logo-img"
               onError={(e) => {
                 e.target.style.display = 'none';
@@ -82,7 +82,7 @@ export default function Navbar() {
               }}
             />
             <span className="nav-brand-fallback" style={{ display: 'none' }}>
-              kioluna<span>.</span>
+              Luniva
             </span>
           </Link>
 

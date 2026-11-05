@@ -161,7 +161,7 @@ export default function Admin() {
   return (
     <div className="admin page">
       <div className="admin-sidebar">
-          <div className="admin-brand">Kioluna · Admin</div>
+          <div className="admin-brand">Luniva · Admin</div>
           {TABS.map(t => (
             <button key={t} className={`admin-nav-btn ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>
               <span className={`nav-icon nav-icon-${TAB_ICONS[t]}`} aria-hidden="true" />

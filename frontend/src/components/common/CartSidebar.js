@@ -46,7 +46,7 @@ export default function CartSidebar() {
               </svg>
             </div>
             <p className="cart-empty-text">現在カートは空です</p>
-            <p className="cart-empty-sub">Kiolunaの心地よいアイテムをチェックしてみましょう</p>
+            <p className="cart-empty-sub">Lunivaの心地よいアイテムをチェックしてみましょう</p>
             <Link to="/shop" className="btn btn-primary" onClick={() => setIsOpen(false)}>
               商品を見る
             </Link>

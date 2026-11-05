@@ -1,7 +1,7 @@
-.kioluna-footer {
+.site-footer {
   margin-top: auto;
   overflow: hidden;
-  background: #1f6f5c;
+  background: #143525;
   color: #ffffff;
   font-size: 14px;
 }
@@ -60,7 +60,7 @@
   padding: 9px 16px;
   border-radius: 999px;
   background: #ffffff;
-  color: #164f42;
+  color: #143525;
   font-weight: 800;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .footer-newsletter input:focus {
-  border-color: #164f42;
+  border-color: #143525;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.32);
 }
 
@@ -93,7 +93,7 @@
   border: 1px solid #ffffff;
   border-radius: 4px;
   background: #ffffff;
-  color: #164f42;
+  color: #143525;
   font: inherit;
   font-weight: 800;
 }
@@ -129,22 +129,33 @@
 
 .footer-wordmark-wrap {
   overflow: hidden;
-  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  padding: 12px 20px 18px;
   text-align: center;
 }
 
 .footer-wordmark-wrap a {
-  display: block;
+  display: inline-flex;
+  max-width: 100%;
 }
 
 .footer-wordmark-img {
   display: block;
-  width: 100%;
-  max-width: 1400px;
+  width: min(38vw, 150px);
+  max-width: 100%;
+  max-height: 154px;
   height: auto;
   margin: 0 auto;
   object-fit: contain;
   filter: brightness(0) invert(1);
+}
+
+@media (max-width: 640px) {
+  .footer-wordmark-img {
+    width: 116px;
+    max-height: 120px;
+  }
 }
 
 @media (max-width: 900px) {

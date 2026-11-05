@@ -95,7 +95,7 @@ export default function Shop() {
       <div className="shop-header-bar">
         <div className="container shop-header-inner">
           <div>
-            <span className="shop-eyebrow">Kioluna 公式オンラインストア</span>
+            <span className="shop-eyebrow">Luniva 公式オンラインストア</span>
             <h1 className="shop-title">
               {search ? `「${search}」の検索結果` : category || '全商品コレクション'}
             </h1>

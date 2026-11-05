@@ -136,7 +136,7 @@ export default function ProductDetail() {
           <div className="detail-info">
             <div className="detail-badge-row">
               <span className="detail-category">{product.category}</span>
-              <span className="badge-authentic">🌿 Kioluna 公式正規品</span>
+              <span className="badge-authentic">🌿 Luniva 公式正規品</span>
             </div>
 
             <h1 className="detail-name">{product.name}</h1>
@@ -192,7 +192,7 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Kioluna Trust Highlights Box */}
+            {/* Luniva Trust Highlights Box */}
             <div className="detail-guarantee-card">
               <div className="detail-guarantee-item">
                 <span className="guarantee-icon">🛡️</span>
