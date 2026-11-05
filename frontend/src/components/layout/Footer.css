@@ -10,8 +10,11 @@
   display: grid;
   grid-template-columns: 1fr 0.85fr 1fr;
   gap: 56px;
-  padding-top: 48px;
-  padding-bottom: 40px;
+}
+
+.footer-inner.container {
+  padding-top: 52px;
+  padding-bottom: 48px;
 }
 
 .footer-inner > section,
@@ -20,13 +23,23 @@
 }
 
 .footer-inner h2 {
-  margin: 0 0 16px;
-  padding-left: 12px;
-  border-left: 3px solid #143525;
+  position: relative;
+  margin: 0 0 20px;
+  padding-bottom: 12px;
   color: #143525;
   font-size: 17px;
   font-weight: 800;
   line-height: 1.35;
+}
+
+.footer-inner h2::after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 36px;
+  height: 2px;
+  background: #2d6248;
+  content: '';
 }
 
 .footer-support p,
@@ -112,9 +125,12 @@
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 24px;
-  padding-top: 20px;
-  padding-bottom: 24px;
   border-top: 1px solid #e2e8e3;
+}
+
+.footer-payment.container {
+  padding-top: 22px;
+  padding-bottom: 28px;
 }
 
 .footer-payment h2 {
@@ -234,6 +250,11 @@
     gap: 36px;
   }
 
+  .footer-inner.container {
+    padding-top: 40px;
+    padding-bottom: 36px;
+  }
+
   .footer-payment {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -248,7 +269,10 @@
   .footer-inner {
     grid-template-columns: 1fr;
     gap: 30px;
-    padding-top: 36px;
+  }
+
+  .footer-inner.container {
+    padding-top: 34px;
     padding-bottom: 30px;
   }
 
