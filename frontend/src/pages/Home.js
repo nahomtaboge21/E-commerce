@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { productsAPI } from '../api';
 import ProductCard from '../components/common/ProductCard';
 import fallbackProducts from '../data/products.json';
-import { productsAPI } from '../api';
-import ProductCard from '../components/common/ProductCard';
 import './Home.css';
 import kiolunaHero from '../assets/kioluna-hero.png';
 
