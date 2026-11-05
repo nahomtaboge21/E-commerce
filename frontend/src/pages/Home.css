@@ -160,7 +160,6 @@
 .kioluna-why-card {
   padding: 28px;
   border: 1px solid #d7e3da;
-  border-top: 4px solid var(--home-brand);
   border-radius: 16px;
   background: #ffffff;
   box-shadow: 0 10px 26px rgba(20, 53, 37, 0.07);
@@ -175,7 +174,11 @@
   border-radius: 12px;
   background: var(--home-brand);
   color: #ffffff;
-  font-size: 20px;
+}
+
+.kioluna-why-icon svg {
+  width: 23px;
+  height: 23px;
 }
 
 .kioluna-why-card h3 {

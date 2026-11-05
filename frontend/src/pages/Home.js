@@ -11,10 +11,30 @@ const REVIEWS = [
 ];
 
 const REASONS = [
-  ['✨', '確かな品質', '丁寧に選び抜いた、長く使えて、約束どおりの働きをするアイテムだけを。'],
-  ['💚', '実感できる変化', '多くのお客様が、肌や髪、毎日の暮らしの違いを実感しています。'],
-  ['🛡️', 'リスクなしでお試し', '60日間の返金保証。ご満足いただけなければ、全額返金いたします。'],
+  ['quality', '確かな品質', '丁寧に選び抜いた、長く使えて、約束どおりの働きをするアイテムだけを。'],
+  ['results', '実感できる変化', '多くのお客様が、肌や髪、毎日の暮らしの違いを実感しています。'],
+  ['guarantee', 'リスクなしでお試し', '60日間の返金保証。ご満足いただけなければ、全額返金いたします。'],
 ];
+
+function BenefitIcon({ name }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {name === 'quality' && <>
+        <path d="m12 3 2.3 1.4 2.7-.1 1.3 2.4 2.3 1.5-.5 2.7.5 2.7-2.3 1.5-1.3 2.4-2.7-.1L12 21l-2.3-1.4-2.7.1-1.3-2.4-2.3-1.5.5-2.7-.5-2.7 2.3-1.5 1.3-2.4 2.7.1z" />
+        <path d="m9 12 2 2 4-4" />
+      </>}
+      {name === 'results' && <>
+        <path d="M4 19h16" />
+        <path d="m5 15 5-5 4 3 6-7" />
+        <path d="M15 6h5v5" />
+      </>}
+      {name === 'guarantee' && <>
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="m9 12 2 2 4-4" />
+      </>}
+    </svg>
+  );
+}
 
 function ReviewCard({ review }) {
   const [title, comment, author] = review;
@@ -93,7 +113,7 @@ export default function Home() {
           <div className="kioluna-why-grid">
             {REASONS.map(([icon, title, description]) => (
               <article className="kioluna-why-card" key={title}>
-                <span className="kioluna-why-icon" aria-hidden="true">{icon}</span>
+                <span className="kioluna-why-icon"><BenefitIcon name={icon} /></span>
                 <h3>{title}</h3>
                 <p>{description}</p>
               </article>
