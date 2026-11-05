@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
-import logo from '../../assets/logo.png';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -58,12 +57,10 @@ export default function Navbar() {
         <div className="container topbar-inner">
           <div className="topbar-left">
             <div className="topbar-pill">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              +1 (396) 541-0000
+              Thoughtfully chosen for everyday
             </div>
             <div className="topbar-pill">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              support@shopvine.com
+              A considered collection, made easy to explore
             </div>
           </div>
 
@@ -133,9 +130,15 @@ export default function Navbar() {
 
       <nav className="nav-main-sticky">
       <div className="container nav-inner">
-        <Link to="/" className="nav-logo" aria-label="ShopVine home">
-          <img src={logo} alt="ShopVine" className="nav-logo-img" />
+        <Link to="/" className="nav-logo" aria-label="Kioluna home">
+          <span className="nav-brand">kioluna<span>.</span></span>
         </Link>
+
+        <div className="nav-primary-links" aria-label="Main navigation">
+          <Link to="/shop">Shop all</Link>
+          <Link to="/shop?featured=true">Featured</Link>
+          <Link to="/orders">Order tracking</Link>
+        </div>
 
         <div className="nav-actions">
           <form className="nav-search" onSubmit={handleSearch} role="search" aria-label="Search products">
@@ -146,7 +149,7 @@ export default function Navbar() {
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search" />
           </form>
 
-          <Link to="/shop" className="btn btn-primary btn-sm shop-now-btn">Shop Now</Link>
+          <Link to="/shop" className="btn btn-primary btn-sm shop-now-btn">Shop all</Link>
 
           <button className="btn btn-icon btn-ghost cart-btn" onClick={() => setIsOpen(true)} aria-label="Cart" type="button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -231,6 +234,7 @@ export default function Navbar() {
             <button className="btn btn-primary btn-sm" type="submit">Go</button>
           </form>
           <Link to="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
+          <Link to="/shop?featured=true" onClick={() => setMenuOpen(false)}>Featured</Link>
           {user ? (
             <>
               <Link to="/profile" onClick={() => setMenuOpen(false)}>Profile</Link>

@@ -28,7 +28,7 @@ export function Login() {
   return (
     <div className="auth-page page">
       <div className="auth-card card">
-        <div className="auth-logo"><span>⬡</span> ShopVine</div>
+        <div className="auth-logo"><span>⬡</span> Kioluna</div>
         <h1>Admin Login</h1>
         <p className="auth-sub">This login is only for store administrators.</p>
         <form onSubmit={handleSubmit}>

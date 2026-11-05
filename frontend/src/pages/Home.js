@@ -80,9 +80,30 @@ export default function Home() {
               <span className="kicker-text">Featured</span>
               <span className="kicker-line" />
             </div>
-            <h2 className="flone-hero-title">ShopVine</h2>
-            <p className="flone-hero-sub">Everyday essentials, delivered fast.</p>
-            <Link to="/shop" className="btn flone-hero-btn">Shop now</Link>
+            <h2 className="flone-hero-title">Everyday, thoughtfully chosen.</h2>
+            <p className="flone-hero-sub">Discover considered pieces for the way you live, move, and unwind.</p>
+            <Link to="/shop" className="btn flone-hero-btn">Explore the collection</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-collections">
+        <div className="container">
+          <div className="home-collections-heading">
+            <div><span className="home-eyebrow">Find your favorites</span><h2>Shop by collection</h2></div>
+            <Link to="/shop" className="home-text-link">Explore everything <span aria-hidden="true">→</span></Link>
+          </div>
+          <div className="home-collection-grid">
+            {[
+              { name: 'Style', category: 'Fashion', note: 'Pieces for every day' },
+              { name: 'Beauty', category: 'Beauty', note: 'A little time for you' },
+              { name: 'Home & living', category: 'Home & Garden', note: 'Make room to unwind' },
+              { name: 'Move & play', category: 'Sports', note: 'Made for your momentum' },
+            ].map((collection, index) => (
+              <Link key={collection.category} to={`/shop?category=${encodeURIComponent(collection.category)}`} className={`home-collection home-collection-${index + 1}`}>
+                <span>{collection.note}</span><strong>{collection.name}</strong><b aria-hidden="true">↗</b>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
@@ -90,7 +111,7 @@ export default function Home() {
       <section className="flone-perks">
         <div className="container perks-inner">
           {[
-            { icon: 'shipping', title: 'Free Shipping', desc: 'On all orders over $200' },
+            { icon: 'shipping', title: 'Free Shipping', desc: 'On orders over $50' },
             { icon: 'support', title: 'Support 24/7', desc: 'We are here to help' },
             { icon: 'returns', title: 'Money Return', desc: '30-day money back' },
           ].map(p => (

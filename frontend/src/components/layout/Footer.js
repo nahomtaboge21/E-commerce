@@ -7,33 +7,33 @@ export default function Footer() {
       <div className="container footer-inner">
         <div className="footer-brand">
           <Link to="/" className="footer-logo">
-            ShopVine<span className="footer-dot">.</span>
+            Kioluna<span className="footer-dot">.</span>
           </Link>
-          <p>Simple shopping, fast shipping, easy returns.</p>
+          <p>Considered essentials for a more thoughtful everyday. Discover finds chosen for quality, comfort, and lasting use.</p>
         </div>
 
         <div className="footer-links">
           <div className="footer-col">
-            <h4>About us</h4>
-            <Link to="/">About us</Link>
-            <a href="#">Store location</a>
-            <a href="#">Contact</a>
+            <h4>Discover Kioluna</h4>
+            <Link to="/">Our story</Link>
+            <Link to="/shop">Shop all</Link>
+            <Link to="/profile">My account</Link>
           </div>
 
           <div className="footer-col">
             <h4>Useful links</h4>
-            <a href="#">Returns</a>
-            <a href="#">Support Policy</a>
-            <a href="#">Size guide</a>
-            <a href="#">FAQs</a>
+            <Link to="/orders">Order tracking</Link>
+            <Link to="/checkout">Shipping &amp; checkout</Link>
+            <Link to="/orders">Returns &amp; support</Link>
+            <Link to="/shop">FAQs</Link>
           </div>
 
           <div className="footer-col">
-            <h4>Follow us</h4>
-            <a href="#">Facebook</a>
-            <a href="#">Twitter</a>
-            <a href="#">Instagram</a>
-            <a href="#">YouTube</a>
+            <h4>Shop by category</h4>
+            <Link to="/shop?category=Beauty">Beauty</Link>
+            <Link to="/shop?category=Home%20%26%20Garden">Home &amp; living</Link>
+            <Link to="/shop?category=Fashion">Style</Link>
+            <Link to="/shop?category=Sports">Wellness</Link>
           </div>
 
           <div className="footer-col footer-subscribe">
@@ -49,7 +49,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <div className="container">
-          <p>© {new Date().getFullYear()} ShopVine. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Kioluna. All rights reserved.</p>
         </div>
       </div>
     </footer>

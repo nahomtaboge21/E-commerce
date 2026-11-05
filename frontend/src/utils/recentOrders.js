@@ -42,7 +42,7 @@ export function downloadReceipt(order) {
   doc.setTextColor(255, 255, 255);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(24);
-  doc.text('ShopVine Receipt', 20, 27);
+  doc.text('Kioluna Receipt', 20, 27);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(11);
   doc.setTextColor(226, 232, 240);
@@ -124,7 +124,7 @@ export function downloadReceipt(order) {
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(9);
   doc.setTextColor(100, 116, 139);
-  doc.text('Thank you for shopping with ShopVine.', 20, 285);
+  doc.text('Thank you for shopping with Kioluna.', 20, 285);
 
   doc.save(`${order.id}-receipt.pdf`);
 }
