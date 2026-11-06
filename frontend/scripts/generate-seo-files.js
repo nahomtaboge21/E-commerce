@@ -6,6 +6,7 @@ const productsPath = path.resolve(__dirname, '../src/data/products.json');
 const configuredSiteUrl = process.env.REACT_APP_SITE_URL
   || process.env.VERCEL_PROJECT_PRODUCTION_URL
   || process.env.VERCEL_URL;
+const shopifyConfigured = Boolean(process.env.REACT_APP_SHOPIFY_STORE_DOMAIN && process.env.REACT_APP_SHOPIFY_STOREFRONT_ACCESS_TOKEN);
 const indexPath = path.join(buildDir, 'index.html');
 
 if (!fs.existsSync(indexPath)) {
@@ -112,7 +113,8 @@ for (const page of publicPages) {
 }
 
 for (const product of products) {
-  const route = `/product/${encodeURIComponent(product.id)}`;
+  const productHandle = shopifyConfigured ? `luniva-${product.id}` : String(product.id);
+  const route = `/product/${encodeURIComponent(productHandle)}`;
   const title = `${product.name} | Luniva`;
   const description = String(product.description || `${product.name}。Luniva公式オンラインストアの商品詳細。`).replace(/\s+/g, ' ').slice(0, 155);
   const productUrl = `${siteUrl}${route}`;
@@ -141,7 +143,7 @@ for (const route of ['/checkout', '/orders', '/profile', '/login', '/admin', '/t
   createPageHtml({ route, title: `${route.slice(1)} | Luniva`, description: 'Lunivaのお客様向けページです。', noIndex: true });
 }
 
-const urls = [...publicPages.map((page) => page.route), ...products.map((product) => `/product/${encodeURIComponent(product.id)}`)];
+const urls = [...publicPages.map((page) => page.route), ...products.map((product) => `/product/${encodeURIComponent(shopifyConfigured ? `luniva-${product.id}` : product.id)}`)];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((route) => `  <url><loc>${escapeXml(`${siteUrl}${route}`)}</loc></url>`).join('\n')}\n</urlset>\n`;
 fs.writeFileSync(path.join(buildDir, 'sitemap.xml'), sitemap);
 
@@ -167,7 +169,7 @@ const llms = [
   '',
   '## Product catalog',
   '',
-  ...products.map((product) => `- [${product.name}](${siteUrl}/product/${encodeURIComponent(product.id)}): ${product.description} Price: JPY ${Number(product.price).toLocaleString('ja-JP')}.`),
+  ...products.map((product) => `- [${product.name}](${siteUrl}/product/${encodeURIComponent(shopifyConfigured ? `luniva-${product.id}` : product.id)}): ${product.description} Price: JPY ${Number(product.price).toLocaleString('ja-JP')}.`),
   '',
 ].join('\n');
 fs.writeFileSync(path.join(buildDir, 'llms.txt'), llms);

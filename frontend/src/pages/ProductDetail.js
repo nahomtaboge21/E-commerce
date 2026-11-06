@@ -6,6 +6,7 @@ import ProductCard from '../components/common/ProductCard';
 import fallbackProducts from '../data/products.json';
 import { formatYen } from '../utils/currency';
 import { useSeo } from '../utils/seo';
+import { isShopifyConfigured } from '../shopify/storefront';
 import './ProductDetail.css';
 
 const Stars = ({ rating, count }) => (
@@ -39,7 +40,23 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [activeImgIndex, setActiveImgIndex] = useState(0);
+  const [selectedVariantId, setSelectedVariantId] = useState('');
   const { addItem } = useCart();
+
+  const variants = product?.variants || [];
+  const selectedVariant = variants.find((variant) => variant.id === selectedVariantId)
+    || variants.find((variant) => variant.availableForSale)
+    || variants[0];
+  const displayProduct = product && selectedVariant
+    ? {
+      ...product,
+      variantId: selectedVariant.id,
+      variantTitle: selectedVariant.title,
+      price: selectedVariant.price,
+      originalPrice: selectedVariant.compareAtPrice,
+      stock: selectedVariant.availableForSale ? Number.MAX_SAFE_INTEGER : 0,
+    }
+    : product;
 
   const productDescription = product?.description || 'Luniva公式オンラインストアの商品詳細をご覧ください。';
   const productImage = product?.image || product?.images?.[0] || '/luniva-logo.png';
@@ -74,12 +91,15 @@ export default function ProductDetail() {
     productsAPI
       .getById(id)
       .then((res) => {
-        setProduct(res.data);
-        setRelated(res.data.related || []);
+        const loadedProduct = res.data;
+        setProduct(loadedProduct);
+        setSelectedVariantId(loadedProduct.variantId || loadedProduct.variants?.find((variant) => variant.availableForSale)?.id || '');
+        setRelated(loadedProduct.related || []);
         setQty(1);
         setActiveImgIndex(0);
       })
       .catch(() => {
+        if (isShopifyConfigured) return;
         const item = fallbackProducts.find((p) => p.id === id);
         if (item) {
           setProduct(item);
@@ -91,7 +111,7 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleAddToCart = () => {
-    addItem(product, qty);
+    addItem(displayProduct, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 2200);
   };
@@ -116,8 +136,8 @@ export default function ProductDetail() {
   }
 
   const discount =
-    product.originalPrice > product.price
-      ? Math.round((1 - product.price / product.originalPrice) * 100)
+    displayProduct.originalPrice > displayProduct.price
+      ? Math.round((1 - displayProduct.price / displayProduct.originalPrice) * 100)
       : 0;
 
   const images = Array.isArray(product.images) && product.images.length
@@ -176,12 +196,12 @@ export default function ProductDetail() {
             {product.reviews > 0 && <Stars rating={product.rating} count={product.reviews} />}
 
             <div className="detail-pricing">
-              <span className="detail-price">{formatYen(product.price)}</span>
+              <span className="detail-price">{formatYen(displayProduct.price)}</span>
               {discount > 0 && (
                 <>
-                  <span className="detail-original">{formatYen(product.originalPrice)}</span>
+                  <span className="detail-original">{formatYen(displayProduct.originalPrice)}</span>
                   <span className="badge badge-danger">
-                    {formatYen(product.originalPrice - product.price)} お得
+                    {formatYen(displayProduct.originalPrice - displayProduct.price)} お得
                   </span>
                 </>
               )}
@@ -190,24 +210,37 @@ export default function ProductDetail() {
 
             <p className="detail-description">{product.description}</p>
 
+            {variants.length > 1 && (
+              <label className="detail-variant-select-wrap">
+                <span>バリエーション</span>
+                <select value={selectedVariant?.id || ''} onChange={(event) => { setSelectedVariantId(event.target.value); setQty(1); }}>
+                  {variants.map((variant) => (
+                    <option key={variant.id} value={variant.id} disabled={!variant.availableForSale}>
+                      {variant.title}{variant.availableForSale ? '' : '（在庫切れ）'}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+
             <div className="detail-stock">
-              {product.stock > 10 ? (
+              {displayProduct.stock > 10 ? (
                   <span className="badge badge-success">✓ 在庫あり（1〜2営業日以内に発送）</span>
-              ) : product.stock > 0 ? (
-                <span className="badge badge-warning">残りわずか（残り {product.stock} 点）</span>
+              ) : displayProduct.stock > 0 ? (
+                <span className="badge badge-warning">残りわずか（残り {displayProduct.stock} 点）</span>
               ) : (
                 <span className="badge badge-danger">現在在庫切れ</span>
               )}
             </div>
 
-            {product.stock > 0 && (
+            {displayProduct.stock > 0 && (
               <div className="detail-add">
                 <div className="qty-control" aria-label="数量">
                   <button onClick={() => setQty((q) => Math.max(1, q - 1))} type="button">
                     −
                   </button>
                   <span>{qty}</span>
-                  <button onClick={() => setQty((q) => Math.min(product.stock, q + 1))} type="button">
+                  <button onClick={() => setQty((q) => Math.min(displayProduct.stock, q + 1))} type="button">
                     +
                   </button>
                 </div>

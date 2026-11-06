@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getShopifyFeaturedProducts, getShopifyProductByHandle, getShopifyProducts, isShopifyConfigured } from './shopify/storefront';
 
 const api = axios.create({ baseURL: '/api' });
 const TOKEN_KEY = 'kioluna_token';
@@ -37,9 +38,9 @@ export const authAPI = {
 };
 
 export const productsAPI = {
-  getAll: (params) => api.get('/products', { params }),
-  getFeatured: () => api.get('/products/featured'),
-  getById: (id) => api.get(`/products/${id}`),
+  getAll: (params) => isShopifyConfigured ? getShopifyProducts(params) : api.get('/products', { params }),
+  getFeatured: () => isShopifyConfigured ? getShopifyFeaturedProducts() : api.get('/products/featured'),
+  getById: (id) => isShopifyConfigured ? getShopifyProductByHandle(id) : api.get(`/products/${id}`),
   create: (data) => api.post('/products', data),
   update: (id, data) => api.put(`/products/${id}`, data),
   delete: (id) => api.delete(`/products/${id}`),

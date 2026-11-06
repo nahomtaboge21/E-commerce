@@ -7,10 +7,12 @@ export function CartProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const addItem = useCallback((product, qty = 1) => {
+    const cartId = product.variantId || product.id;
+    const cartProduct = { ...product, id: cartId, productId: product.productId || product.id };
     setItems(prev => {
-      const existing = prev.find(i => i.id === product.id);
-      if (existing) return prev.map(i => i.id === product.id ? { ...i, quantity: Math.min(i.quantity + qty, product.stock) } : i);
-      return [...prev, { ...product, quantity: qty }];
+      const existing = prev.find(i => i.id === cartId);
+      if (existing) return prev.map(i => i.id === cartId ? { ...i, quantity: Math.min(i.quantity + qty, product.stock) } : i);
+      return [...prev, { ...cartProduct, quantity: qty }];
     });
     setIsOpen(true);
   }, []);

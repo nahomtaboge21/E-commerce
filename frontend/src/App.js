@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
@@ -15,7 +16,21 @@ import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 import SupportPages from './pages/SupportPages';
 import { useSeo } from './utils/seo';
+import { isShopifyConfigured, shopifyAccountUrl, shopifyAdminUrl } from './shopify/storefront';
 import './styles/globals.css';
+
+function ShopifyRedirect({ href, title }) {
+  useSeo({ title: `${title} | Luniva`, description: 'このページはShopifyアカウントへ移動します。', noIndex: true });
+  useEffect(() => {
+    if (href) window.location.replace(href);
+  }, [href]);
+  return (
+    <div className="container" style={{ padding: '80px 20px', textAlign: 'center' }}>
+      <p>Shopifyへ移動しています…</p>
+      {href && <a className="btn btn-primary" href={href}>続行</a>}
+    </div>
+  );
+}
 
 function NotFound() {
   useSeo({ title: 'ページが見つかりません | Luniva', description: 'お探しのページは見つかりませんでした。', noIndex: true });
@@ -50,13 +65,13 @@ export default function App() {
             <Route path="/product/:id" element={<Layout><ProductDetail /></Layout>} />
             <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
             <Route path="/order-confirmation/:id" element={<Layout><OrderConfirmation /></Layout>} />
-            <Route path="/orders" element={<Layout><Orders /></Layout>} />
-            <Route path="/profile" element={<Layout><Profile /></Layout>} />
-            <Route path="/login" element={<Layout noFooter><Login /></Layout>} />
-            <Route path="/admin" element={<Layout noFooter><Admin /></Layout>} />
+            <Route path="/orders" element={<Layout>{isShopifyConfigured ? <ShopifyRedirect href={shopifyAccountUrl} title="ご注文履歴" /> : <Orders />}</Layout>} />
+            <Route path="/profile" element={<Layout>{isShopifyConfigured ? <ShopifyRedirect href={shopifyAccountUrl} title="アカウント" /> : <Profile />}</Layout>} />
+            <Route path="/login" element={<Layout noFooter>{isShopifyConfigured ? <ShopifyRedirect href={shopifyAccountUrl} title="ログイン" /> : <Login />}</Layout>} />
+            <Route path="/admin" element={<Layout noFooter>{isShopifyConfigured ? <ShopifyRedirect href={shopifyAdminUrl} title="Shopify管理画面" /> : <Admin />}</Layout>} />
             <Route path="/faq" element={<Layout><SupportPages /></Layout>} />
             <Route path="/contact" element={<Layout><SupportPages /></Layout>} />
-            <Route path="/track-order" element={<Layout><SupportPages /></Layout>} />
+            <Route path="/track-order" element={<Layout>{isShopifyConfigured ? <ShopifyRedirect href={shopifyAccountUrl} title="ご注文の追跡" /> : <SupportPages />}</Layout>} />
             <Route path="/shipping-policy" element={<Layout><SupportPages /></Layout>} />
             <Route path="/refund-policy" element={<Layout><SupportPages /></Layout>} />
             <Route path="/terms-of-service" element={<Layout><SupportPages /></Layout>} />

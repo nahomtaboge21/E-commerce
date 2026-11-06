@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { productsAPI } from '../api';
 import ProductCard from '../components/common/ProductCard';
 import fallbackProducts from '../data/products.json';
+import { isShopifyConfigured } from '../shopify/storefront';
 import { useSeo } from '../utils/seo';
 import './Shop.css';
 
@@ -22,6 +23,7 @@ export default function Shop() {
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(() => typeof window !== 'undefined' && window.innerWidth > 960);
 
   const category = searchParams.get('category') || '';
@@ -37,6 +39,7 @@ export default function Shop() {
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
+    setLoadError('');
     try {
       const res = await productsAPI.getAll({ search, category, sortBy, page, minPrice, maxPrice, featured, limit: 12 });
       setProducts(res.data.products);
@@ -44,6 +47,14 @@ export default function Shop() {
       setTotal(res.data.total);
       setPages(res.data.pages);
     } catch (e) {
+      if (isShopifyConfigured) {
+        setProducts([]);
+        setCategories([]);
+        setTotal(0);
+        setPages(1);
+        setLoadError('Shopifyの商品を読み込めませんでした。設定と公開状態を確認して、もう一度お試しください。');
+        return;
+      }
       let filtered = [...fallbackProducts];
       if (search) {
         const q = search.toLowerCase();
@@ -229,6 +240,11 @@ export default function Shop() {
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="product-skeleton" />
               ))}
+            </div>
+          ) : loadError ? (
+            <div className="shop-empty">
+              <p>{loadError}</p>
+              <button className="btn btn-outline" onClick={fetchProducts}>再読み込み</button>
             </div>
           ) : products.length === 0 ? (
             <div className="shop-empty">

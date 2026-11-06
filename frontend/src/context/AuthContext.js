@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { authAPI } from '../api';
+import { isShopifyConfigured } from '../shopify/storefront';
 
 const AuthContext = createContext(null);
 const TOKEN_KEY = 'kioluna_token';
@@ -9,12 +10,17 @@ const LEGACY_USER_KEY = 'shopwave_user';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
+    if (isShopifyConfigured) return null;
     const stored = localStorage.getItem(USER_KEY) || localStorage.getItem(LEGACY_USER_KEY);
     return stored ? JSON.parse(stored) : null;
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (isShopifyConfigured) {
+      setLoading(false);
+      return;
+    }
     const token = localStorage.getItem(TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY);
     if (token) {
       if (!localStorage.getItem(TOKEN_KEY)) localStorage.setItem(TOKEN_KEY, token);

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../api';
 import { saveRecentOrder } from '../utils/recentOrders';
 import { formatYen } from '../utils/currency';
+import { createShopifyCheckout, isShopifyConfigured } from '../shopify/storefront';
 import './Checkout.css';
 
 function formatCard(val) {
@@ -255,6 +256,57 @@ function StepReview({ form, items, error, setStep }) {
 }
 
 export default function Checkout() {
+  return isShopifyConfigured ? <ShopifyCheckout /> : <LegacyCheckout />;
+}
+
+function ShopifyCheckout() {
+  useSeo({ title: 'ご注文手続き | Luniva', description: 'Shopifyの安全なチェックアウトでお届け先とお支払い方法を入力します。', canonicalPath: '/checkout', noIndex: true });
+  const { items, total } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const goToShopifyCheckout = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const checkoutUrl = await createShopifyCheckout(items);
+      window.location.assign(checkoutUrl);
+    } catch (checkoutError) {
+      setError(checkoutError.message || 'チェックアウトを開始できませんでした。もう一度お試しください。');
+      setLoading(false);
+    }
+  };
+
+  if (!items.length) {
+    return (
+      <div className="ck-empty page">
+        <div className="container">
+          <h2>カートは空です</h2>
+          <Link to="/shop" className="btn btn-primary">商品一覧を見る</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="ck-page page">
+      <div className="container ck-container">
+        <div className="ck-main">
+          <h1 className="ck-section-title">ご注文内容の確認</h1>
+          <p>お届け先、配送方法、お支払いはShopifyの安全なチェックアウトで入力できます。</p>
+          <p>商品と数量を確認して、Shopifyへ進んでください。</p>
+          {error && <div className="ck-error-box" role="alert">{error}</div>}
+          <button className="btn btn-primary ck-btn-continue" type="button" onClick={goToShopifyCheckout} disabled={loading}>
+            {loading ? 'Shopifyへ接続中…' : '安全なチェックアウトへ進む'}
+          </button>
+        </div>
+        <SummaryPanel items={items} total={total} orderTotal={total} />
+      </div>
+    </div>
+  );
+}
+
+function LegacyCheckout() {
   useSeo({ title: 'ご注文手続き | Luniva', description: 'Lunivaでご注文内容とお届け先を確認して、お支払い手続きに進みます。', canonicalPath: '/checkout', noIndex: true });
   const { items, total, clearCart } = useCart();
   const { user } = useAuth();
