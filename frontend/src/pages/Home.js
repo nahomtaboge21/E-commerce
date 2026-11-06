@@ -1,4 +1,5 @@
 import heroImage from '../assets/kioluna-hero.png';
+import { useSeo } from '../utils/seo';
 import './Home.css';
 
 const REVIEWS = [
@@ -51,6 +52,19 @@ function ReviewCard({ review }) {
 }
 
 export default function Home() {
+  useSeo({
+    title: 'Luniva公式オンラインストア | 美容・ウェルネス・毎日のケア',
+    description: '美容、ウェルネス、毎日の暮らしに役立つアイテムをお届けするLunivaの公式オンラインストアです。',
+    canonicalPath: '/',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Luniva公式オンラインストア',
+      inLanguage: 'ja-JP',
+      url: '__LUNIVA_SITE_URL__/',
+    },
+  });
+
   return (
     <div className="kioluna-home">
       <section className="kioluna-hero-section">

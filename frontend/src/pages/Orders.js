@@ -4,6 +4,7 @@ import { ordersAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { downloadReceipt, getRecentOrders } from '../utils/recentOrders';
 import { formatYen } from '../utils/currency';
+import { useSeo } from '../utils/seo';
 
 const STATUS = {
   processing: ['ご注文確認中', 'badge-info'],
@@ -14,6 +15,7 @@ const STATUS = {
 };
 
 export default function Orders() {
+  useSeo({ title: 'ご注文履歴 | Luniva', description: 'Lunivaのお客様向けご注文履歴ページです。', canonicalPath: '/orders', noIndex: true });
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();

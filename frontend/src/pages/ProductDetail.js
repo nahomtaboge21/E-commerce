@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import ProductCard from '../components/common/ProductCard';
 import fallbackProducts from '../data/products.json';
 import { formatYen } from '../utils/currency';
+import { useSeo } from '../utils/seo';
 import './ProductDetail.css';
 
 const Stars = ({ rating, count }) => (
@@ -39,6 +40,34 @@ export default function ProductDetail() {
   const [added, setAdded] = useState(false);
   const [activeImgIndex, setActiveImgIndex] = useState(0);
   const { addItem } = useCart();
+
+  const productDescription = product?.description || 'Luniva公式オンラインストアの商品詳細をご覧ください。';
+  const productImage = product?.image || product?.images?.[0] || '/luniva-logo.png';
+  useSeo({
+    title: product ? `${product.name} | Luniva` : '商品情報 | Luniva',
+    description: productDescription,
+    canonicalPath: `/product/${encodeURIComponent(id)}`,
+    image: productImage,
+    type: 'product',
+    noIndex: !product,
+    structuredData: product ? {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: productDescription,
+      sku: String(product.id),
+      image: product.images?.length ? product.images : [productImage],
+      brand: { '@type': 'Brand', name: 'Luniva' },
+      offers: {
+        '@type': 'Offer',
+        url: `__LUNIVA_SITE_URL__/product/${encodeURIComponent(product.id)}`,
+        priceCurrency: 'JPY',
+        price: Number(product.price),
+        availability: Number(product.stock) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+        itemCondition: 'https://schema.org/NewCondition',
+      },
+    } : null,
+  });
 
   useEffect(() => {
     setLoading(true);

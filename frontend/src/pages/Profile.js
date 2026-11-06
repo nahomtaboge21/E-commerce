@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../api';
+import { useSeo } from '../utils/seo';
 
 export default function Profile() {
+  useSeo({ title: 'アカウント情報 | Luniva', description: 'Lunivaのお客様向けアカウント情報ページです。', canonicalPath: '/profile', noIndex: true });
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: user?.name || '', currentPassword: '', newPassword: '' });

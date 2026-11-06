@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { adminAPI, ordersAPI, productsAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { getImageUrl } from '../utils/image';
+import { useSeo } from '../utils/seo';
 import './Admin.css';
 
 const STATUS_COLORS = { processing: 'badge-info', confirmed: 'badge-info', shipped: 'badge-warning', delivered: 'badge-success', cancelled: 'badge-danger' };
@@ -34,6 +35,7 @@ function normalizeStatsResponse(payload, users = []) {
 }
 
 export default function Admin() {
+  useSeo({ title: '管理ページ | Luniva', description: 'Lunivaの管理ページです。', canonicalPath: '/admin', noIndex: true });
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState('dashboard');

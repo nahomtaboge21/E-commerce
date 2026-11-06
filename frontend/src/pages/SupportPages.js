@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../api';
 import { getRecentOrders } from '../utils/recentOrders';
 import { formatYen } from '../utils/currency';
+import { useSeo } from '../utils/seo';
 import './SupportPages.css';
 
 const FAQ = [
@@ -147,9 +148,30 @@ function ContactPage() {
 
 export default function SupportPages() {
   const { pathname } = useLocation();
+  const page = PAGE_CONTENT[pathname] || PAGE_CONTENT['/faq'];
+  const isTracking = pathname === '/track-order';
+  const isContact = pathname === '/contact';
+  useSeo({
+    title: isTracking ? 'ご注文の追跡 | Luniva' : isContact ? 'お問い合わせ | Luniva' : `${page.title} | Luniva`,
+    description: isTracking
+      ? 'Lunivaのご注文状況と配送状況をご確認いただけます。'
+      : isContact
+        ? 'Lunivaへの商品やご注文に関するお問い合わせはこちら。カスタマーサポートの連絡先をご案内します。'
+        : page.intro,
+    canonicalPath: pathname,
+    noIndex: isTracking,
+    structuredData: pathname === '/faq' ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQ.map(([question, answer]) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer },
+      })),
+    } : null,
+  });
   if (pathname === '/contact') return <ContactPage />;
   if (pathname === '/track-order') return <OrderTracking />;
-  const page = PAGE_CONTENT[pathname] || PAGE_CONTENT['/faq'];
   return (
     <SupportLayout title={page.title} eyebrow={page.eyebrow} intro={page.intro}>
       <div className={`support-rows${page.accordion ? ' support-faq' : ''}`}>

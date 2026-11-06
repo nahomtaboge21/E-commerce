@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { productsAPI } from '../api';
 import ProductCard from '../components/common/ProductCard';
 import fallbackProducts from '../data/products.json';
+import { useSeo } from '../utils/seo';
 import './Shop.css';
 
 const SORT_OPTIONS = [
@@ -89,6 +90,18 @@ export default function Shop() {
   };
 
   const hasFilters = category || search || minPrice || maxPrice || featured;
+  const hasQueryFilters = search || minPrice || maxPrice || featured || sortBy !== 'default' || page > 1;
+  const shopTitle = search ? `「${search}」の検索結果 | Luniva` : category ? `${category}の商品一覧 | Luniva` : '全商品一覧 | Luniva';
+  useSeo({
+    title: shopTitle,
+    description: search
+      ? `「${search}」に関連するLunivaの商品をご覧いただけます。`
+      : category
+        ? `${category}のおすすめ商品をLuniva公式オンラインストアでご覧いただけます。`
+        : 'Lunivaの全商品一覧。美容・ウェルネス・毎日のケアに役立つ商品をカテゴリーからお選びいただけます。',
+    canonicalPath: category && !hasQueryFilters ? `/shop?category=${encodeURIComponent(category)}` : '/shop',
+    noIndex: Boolean(hasQueryFilters),
+  });
 
   return (
     <div className="shop page">

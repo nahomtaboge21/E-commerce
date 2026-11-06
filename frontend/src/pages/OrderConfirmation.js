@@ -3,6 +3,7 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { ordersAPI } from '../api';
 import { downloadReceipt, findRecentOrder } from '../utils/recentOrders';
 import { formatYen } from '../utils/currency';
+import { useSeo } from '../utils/seo';
 import './OrderConfirmation.css';
 
 const STATUS_META = {
@@ -14,6 +15,7 @@ const STATUS_META = {
 };
 
 export function OrderConfirmation() {
+  useSeo({ title: 'ご注文完了 | Luniva', description: 'Lunivaのご注文内容をご確認いただけます。', canonicalPath: window.location.pathname, noIndex: true });
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [order, setOrder] = useState(null);

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useSeo } from '../utils/seo';
 import { useAuth } from '../context/AuthContext';
 import { ordersAPI } from '../api';
 import { saveRecentOrder } from '../utils/recentOrders';
@@ -254,6 +255,7 @@ function StepReview({ form, items, error, setStep }) {
 }
 
 export default function Checkout() {
+  useSeo({ title: 'ご注文手続き | Luniva', description: 'Lunivaでご注文内容とお届け先を確認して、お支払い手続きに進みます。', canonicalPath: '/checkout', noIndex: true });
   const { items, total, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();

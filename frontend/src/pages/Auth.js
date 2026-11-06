@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import lunivaLogo from '../assets/luniva-logo.png';
+import { useSeo } from '../utils/seo';
 import './Auth.css';
 
 export function Login() {
+  useSeo({ title: 'ログイン・会員登録 | Luniva', description: 'Lunivaのお客様アカウントにログイン、または新規会員登録します。', canonicalPath: '/login', noIndex: true });
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [mode, setMode] = useState('login');
   const [error, setError] = useState('');
