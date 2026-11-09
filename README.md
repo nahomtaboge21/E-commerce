@@ -2,6 +2,8 @@
 
 A complete full-stack Japanese lifestyle and care storefront inspired by **[kioluna.com](https://kioluna.com/)**, featuring Luniva dark green branding (`#143525`), a responsive React frontend, and a Node.js/Express backend.
 
+For the current site architecture, Shopify/Vercel setup, completed work, and remaining launch steps, see [WEBSITE_INFO.md](WEBSITE_INFO.md).
+
 ---
 
 ## Features
@@ -120,7 +122,7 @@ Query params for GET /api/products:
 | /                        | Home (hero, categories, featured) |
 | /shop                    | Product catalog (filters, search) |
 | /product/:id             | Product detail           |
-| /checkout                | 3-step checkout          |
+| /checkout                | Shopify hosted checkout handoff |
 | /order-confirmation/:id  | Order success            |
 | /orders                  | Order history            |
 | /profile                 | Account settings         |

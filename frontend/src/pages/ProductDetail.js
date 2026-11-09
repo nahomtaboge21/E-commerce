@@ -4,7 +4,7 @@ import { productsAPI } from '../api';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/common/ProductCard';
 import fallbackProducts from '../data/products.json';
-import { formatYen } from '../utils/currency';
+import { formatCurrency } from '../utils/currency';
 import { useSeo } from '../utils/seo';
 import { isShopifyConfigured } from '../shopify/storefront';
 import './ProductDetail.css';
@@ -54,7 +54,12 @@ export default function ProductDetail() {
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,
       originalPrice: selectedVariant.compareAtPrice,
-      stock: selectedVariant.availableForSale ? Number.MAX_SAFE_INTEGER : 0,
+      currencyCode: selectedVariant.currencyCode,
+      availableForSale: selectedVariant.availableForSale,
+      quantityAvailable: selectedVariant.quantityAvailable,
+      stock: selectedVariant.availableForSale
+        ? (Number(selectedVariant.quantityAvailable) > 0 ? Number(selectedVariant.quantityAvailable) : 99)
+        : 0,
     }
     : product;
 
@@ -78,7 +83,7 @@ export default function ProductDetail() {
       offers: {
         '@type': 'Offer',
         url: `__LUNIVA_SITE_URL__/product/${encodeURIComponent(product.id)}`,
-        priceCurrency: 'JPY',
+        priceCurrency: product.currencyCode || 'JPY',
         price: Number(product.price),
         availability: Number(product.stock) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
         itemCondition: 'https://schema.org/NewCondition',
@@ -196,12 +201,12 @@ export default function ProductDetail() {
             {product.reviews > 0 && <Stars rating={product.rating} count={product.reviews} />}
 
             <div className="detail-pricing">
-              <span className="detail-price">{formatYen(displayProduct.price)}</span>
+              <span className="detail-price">{formatCurrency(displayProduct.price, displayProduct.currencyCode)}</span>
               {discount > 0 && (
                 <>
-                  <span className="detail-original">{formatYen(displayProduct.originalPrice)}</span>
+                  <span className="detail-original">{formatCurrency(displayProduct.originalPrice, displayProduct.currencyCode)}</span>
                   <span className="badge badge-danger">
-                    {formatYen(displayProduct.originalPrice - displayProduct.price)} お得
+                    {formatCurrency(displayProduct.originalPrice - displayProduct.price, displayProduct.currencyCode)} お得
                   </span>
                 </>
               )}

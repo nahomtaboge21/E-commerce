@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
-import { formatYen } from '../../utils/currency';
+import { formatCurrency } from '../../utils/currency';
 import './ProductCard.css';
 
 const Stars = ({ rating }) => (
@@ -33,6 +33,7 @@ export default function ProductCard({ product }) {
           src={Array.isArray(product.images) ? (product.images[0] || product.image) : product.image}
           alt={product.name}
           loading="lazy"
+          decoding="async"
         />
         <div className="product-card-badges">
           {discount > 0 && <span className="product-discount">−{discount}%</span>}
@@ -54,9 +55,9 @@ export default function ProductCard({ product }) {
         )}
         {product.reviews > 0 && <div className="product-rating"><Stars rating={product.rating} /><span className="rating-score">{product.rating.toFixed(1)}</span><span className="rating-count">({product.reviews.toLocaleString()})</span></div>}
         <div className="product-pricing">
-          <span className="product-price">{formatYen(product.price)}</span>
+          <span className="product-price">{formatCurrency(product.price, product.currencyCode)}</span>
           {discount > 0 && (
-            <span className="product-original">{formatYen(product.originalPrice)}</span>
+            <span className="product-original">{formatCurrency(product.originalPrice, product.currencyCode)}</span>
           )}
           <span className="tax-inclusive">（税込）</span>
         </div>

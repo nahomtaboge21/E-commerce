@@ -1,4 +1,4 @@
-import heroImage from '../assets/kioluna-hero.png';
+import heroImage from '../assets/kioluna-hero.webp';
 import { useSeo } from '../utils/seo';
 import './Home.css';
 
@@ -74,7 +74,7 @@ export default function Home() {
           <p>シンプルで、品質が高く、実感できる結果。毎日の暮らしをもっと快適にするために選び抜きました。</p>
         </div>
         <div className="kioluna-hero-image">
-          <img src={heroImage} alt="Lunivaのスキンケアと、毎日のセルフケア" />
+          <img src={heroImage} alt="Lunivaのスキンケアと、毎日のセルフケア" loading="eager" decoding="async" />
         </div>
       </section>
 

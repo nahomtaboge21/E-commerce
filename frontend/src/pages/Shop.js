@@ -16,6 +16,38 @@ const SORT_OPTIONS = [
   { value: 'reviews', label: 'レビューの多い順' },
 ];
 
+function getFallbackCatalog({ search, category, sortBy, page, minPrice, maxPrice, featured, limit }) {
+  let products = [...fallbackProducts];
+  const query = String(search || '').trim().toLocaleLowerCase('ja-JP');
+
+  if (query) {
+    products = products.filter((product) =>
+      `${product.name} ${product.description || ''} ${product.category || ''} ${(product.tags || []).join(' ')}`
+        .toLocaleLowerCase('ja-JP').includes(query));
+  }
+  if (category && category !== '全商品') products = products.filter((product) => product.category === category);
+  if (minPrice !== '' && minPrice != null) products = products.filter((product) => product.price >= Number(minPrice));
+  if (maxPrice !== '' && maxPrice != null) products = products.filter((product) => product.price <= Number(maxPrice));
+  if (featured === 'true') products = products.filter((product) => product.featured);
+
+  if (sortBy === 'newest') products.sort((a, b) => Number(b.id) - Number(a.id));
+  else if (sortBy === 'price_asc') products.sort((a, b) => a.price - b.price);
+  else if (sortBy === 'price_desc') products.sort((a, b) => b.price - a.price);
+  else if (sortBy === 'rating') products.sort((a, b) => b.rating - a.rating);
+  else if (sortBy === 'reviews') products.sort((a, b) => b.reviews - a.reviews);
+  else products.sort((a, b) => Number(b.featured) - Number(a.featured));
+
+  const total = products.length;
+  const pageSize = Math.max(1, Number(limit) || 12);
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(Math.max(1, Number(page) || 1), pages);
+  products = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const categories = [...new Set(fallbackProducts.map((product) => product.category).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, 'ja'));
+
+  return { products, categories, total, pages };
+}
+
 export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
@@ -41,6 +73,15 @@ export default function Shop() {
     setLoading(true);
     setLoadError('');
     try {
+      if (!isShopifyConfigured && process.env.NODE_ENV === 'production') {
+        const data = getFallbackCatalog({ search, category, sortBy, page, minPrice, maxPrice, featured, limit: 12 });
+        setProducts(data.products);
+        setCategories(['全商品', ...data.categories]);
+        setTotal(data.total);
+        setPages(data.pages);
+        return;
+      }
+
       const res = await productsAPI.getAll({ search, category, sortBy, page, minPrice, maxPrice, featured, limit: 12 });
       setProducts(res.data.products);
       setCategories(['全商品', ...res.data.categories]);
@@ -55,21 +96,11 @@ export default function Shop() {
         setLoadError('Shopifyの商品を読み込めませんでした。設定と公開状態を確認して、もう一度お試しください。');
         return;
       }
-      let filtered = [...fallbackProducts];
-      if (search) {
-        const q = search.toLowerCase();
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q));
-      }
-      if (category && category !== '全商品') {
-        filtered = filtered.filter(p => p.category === category);
-      }
-      if (minPrice) filtered = filtered.filter(p => p.price >= parseFloat(minPrice));
-      if (maxPrice) filtered = filtered.filter(p => p.price <= parseFloat(maxPrice));
-      if (featured) filtered = filtered.filter(p => p.featured);
-      setProducts(filtered);
-      setCategories(['全商品', ...new Set(fallbackProducts.map(p => p.category))]);
-      setTotal(filtered.length);
-      setPages(1);
+      const data = getFallbackCatalog({ search, category, sortBy, page, minPrice, maxPrice, featured, limit: 12 });
+      setProducts(data.products);
+      setCategories(['全商品', ...data.categories]);
+      setTotal(data.total);
+      setPages(data.pages);
     } finally {
       setLoading(false);
     }
